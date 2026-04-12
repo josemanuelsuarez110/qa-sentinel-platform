@@ -1,0 +1,25 @@
+# Dependencies
+**/node_modules
+**/.pnpm-debug.log
+
+# Build Outputs
+**/dist
+**/.next
+**/out
+**/build
+**/reports/*.json
+**/reports/*.html
+
+# Environment Variables
+.env
+.env.local
+.env.production
+.env.development
+**/.env*
+
+# IDE & Misc
+.vscode
+.idea
+.DS_Store
+*.log
+Thumbs.db

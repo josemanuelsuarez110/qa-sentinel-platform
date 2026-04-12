@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "QA Sentinel Helper",
+  "version": "1.0.0",
+  "description": "Helper extension for automated SaaS testing",
+  "permissions": ["storage", "activeTab"],
+  "action": {
+    "default_popup": "src/popup.html"
+  },
+  "background": {
+    "service_worker": "src/background.js"
+  }
+}
