@@ -1,8 +1,9 @@
 import express from 'express'
 import cors from 'cors'
 import dotenv from 'dotenv'
-import { Queue } from 'bullmq'
+import { Queue, Worker, Job } from 'bullmq'
 import { createClient } from '@supabase/supabase-js'
+import { TestRunner } from '@qa/core'
 
 dotenv.config()
 
@@ -25,6 +26,47 @@ const connection = redisUrl
     }
 
 const testQueue = new Queue('test-runs', { connection: connection as any })
+const runner = new TestRunner()
+
+// --- Multi-process Worker (Embedded) ---
+const testRegistry: Record<string, () => Promise<void>> = {
+  'login-validation': async () => {
+    console.log('[Worker] Running login validation...')
+    await new Promise(r => setTimeout(r, 800))
+  },
+  'tenant-isolation': async () => {
+    console.log('[Worker] Running tenant isolation test...')
+    if (Math.random() < 0.3) {
+      throw new Error('Tenant data cross-contamination detected!')
+    }
+    await new Promise(r => setTimeout(r, 1500))
+  },
+  'api-performance': async () => {
+    console.log('[Worker] Running API performance test...')
+    await new Promise(r => setTimeout(r, 600))
+  },
+  'login': async () => {
+    await new Promise(r => setTimeout(r, 1000))
+  },
+  'subscription': async () => {
+    await new Promise(r => setTimeout(r, 800))
+  }
+}
+
+// Initialize the worker in the same process
+const worker = new Worker('test-runs', async (job: Job) => {
+  const { testName, runId } = job.data
+  console.log(`[Worker] Processing: ${testName} | Run: ${runId}`)
+
+  const testFn = testRegistry[testName]
+  if (!testFn) throw new Error(`Test not found: ${testName}`)
+
+  return await runner.runTest(testFn, testName, runId)
+}, { connection: connection as any })
+
+worker.on('failed', (job, err) => console.error(`[Worker] Job ${job?.id} failed: ${err.message}`))
+console.log('[Worker] Embedded worker active.')
+// ----------------------------------------
 
 app.use(cors())
 app.use(express.json())
