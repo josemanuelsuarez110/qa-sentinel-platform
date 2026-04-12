@@ -1,0 +1,51 @@
+services:
+  # Backend API Orchestrator
+  - type: web
+    name: qa-orchestrator
+    env: node
+    plan: free
+    rootDir: .
+    buildCommand: pnpm install && pnpm --filter @qa/core build && pnpm --filter @qa/backend build
+    startCommand: pnpm --filter @qa/backend start
+    envVars:
+      - key: PORT
+        value: 3001
+      - key: NODE_ENV
+        value: production
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: qa-redis
+          property: connectionString
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_KEY
+        sync: false
+
+  # Distributed Test Worker
+  - type: worker
+    name: qa-worker
+    env: node
+    plan: free
+    rootDir: .
+    buildCommand: pnpm install && pnpm --filter @qa/core build && pnpm --filter @qa/workers build
+    startCommand: pnpm --filter @qa/workers start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: qa-redis
+          property: connectionString
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_KEY
+        sync: false
+
+# Managed Redis instance
+databases:
+  - type: redis
+    name: qa-redis
+    plan: free
+    ipAllowList: []

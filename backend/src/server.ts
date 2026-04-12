@@ -14,14 +14,17 @@ const supabaseUrl = process.env.SUPABASE_URL || 'https://mock.supabase.co'
 const supabaseKey = process.env.SUPABASE_KEY || 'mock-key'
 export const supabase = createClient(supabaseUrl, supabaseKey)
 
-// Setup Redis Queue
-const connection = {
-  host: process.env.REDIS_HOST || 'localhost',
-  port: parseInt(process.env.REDIS_PORT || '6379'),
-  maxRetriesPerRequest: null
-}
+// Setup Redis Queue — usa REDIS_URL si está disponible (Render lo provee)
+const redisUrl = process.env.REDIS_URL
+const connection = redisUrl
+  ? { url: redisUrl }
+  : {
+      host: process.env.REDIS_HOST || 'localhost',
+      port: parseInt(process.env.REDIS_PORT || '6379'),
+      maxRetriesPerRequest: null
+    }
 
-const testQueue = new Queue('test-runs', { connection })
+const testQueue = new Queue('test-runs', { connection: connection as any })
 
 app.use(cors())
 app.use(express.json())

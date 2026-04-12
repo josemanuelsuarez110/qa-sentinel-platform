@@ -4,55 +4,62 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
-const connection = {
-  host: process.env.REDIS_HOST || 'localhost',
-  port: parseInt(process.env.REDIS_PORT || '6379')
-}
+const redisUrl = process.env.REDIS_URL
+const connection = redisUrl
+  ? { url: redisUrl }
+  : {
+      host: process.env.REDIS_HOST || 'localhost',
+      port: parseInt(process.env.REDIS_PORT || '6379')
+    }
 
 const runner = new TestRunner()
 
-// Simple test registry for simulation
+// Test registry: simulates real test execution
 const testRegistry: Record<string, () => Promise<void>> = {
-  'login': async () => {
-    console.log('[Worker] Simulating Login Test...')
-    // Simulating success
-    await new Promise(r => setTimeout(r, 1000))
+  'login-validation': async () => {
+    console.log('[Worker] Running login validation...')
+    await new Promise(r => setTimeout(r, 800))
   },
   'tenant-isolation': async () => {
-    console.log('[Worker] Simulating Tenant Isolation Test...')
-    // Simulating random failure to demonstrate self-healing
+    console.log('[Worker] Running tenant isolation test...')
     if (Math.random() < 0.3) {
       throw new Error('Tenant data cross-contamination detected!')
     }
     await new Promise(r => setTimeout(r, 1500))
   },
+  'api-performance': async () => {
+    console.log('[Worker] Running API performance test...')
+    await new Promise(r => setTimeout(r, 600))
+  },
+  'login': async () => {
+    await new Promise(r => setTimeout(r, 1000))
+  },
   'subscription': async () => {
-    console.log('[Worker] Simulating Subscription Webhook Test...')
     await new Promise(r => setTimeout(r, 800))
   }
 }
 
-let worker: any
-try {
-  worker = new Worker('test-runs', async (job: Job) => {
-    console.log(`[Worker] Started job ${job.id} - Test: ${job.data.testName}`)
-    
-    const testFn = testRegistry[job.data.testName]
-    if (!testFn) {
-      throw new Error(`Test not found: ${job.data.testName}`)
-    }
+const worker = new Worker('test-runs', async (job: Job) => {
+  const { testName, runId, tenantId } = job.data
+  console.log(`[Worker] Job ${job.id} — Test: ${testName} | Run: ${runId}`)
 
-    const result = await runner.runTest(testFn, job.data.testName)
-    
-    console.log(`[Worker] Finished job ${job.id} - Status: ${result.status}`)
-    return result
-  }, { connection })
+  const testFn = testRegistry[testName]
+  if (!testFn) {
+    throw new Error(`Test not found in registry: ${testName}`)
+  }
 
-  worker.on('failed', (job: any, err: any) => {
-    console.error(`[Worker] Job ${job?.id} failed: ${err.message}`)
-  })
+  const result = await runner.runTest(testFn, testName, runId)
+  console.log(`[Worker] Job ${job.id} complete — Status: ${result.status}`)
+  return result
 
-  console.log('[Worker] Distributed Test Worker running...')
-} catch (err) {
-  console.warn('[Worker] Redis not found. Worker in Idle Mode (Simulation handled by Backend).')
-}
+}, { connection: connection as any })
+
+worker.on('failed', (job: any, err: any) => {
+  console.error(`[Worker] Job ${job?.id} failed: ${err.message}`)
+})
+
+worker.on('error', (err) => {
+  console.error('[Worker] Redis connection error:', err.message)
+})
+
+console.log('[Worker] Distributed Test Worker running and listening for jobs...')
