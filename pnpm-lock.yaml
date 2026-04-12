@@ -51,6 +51,9 @@ importers:
 
   frontend:
     dependencies:
+      '@supabase/supabase-js':
+        specifier: ^2.103.0
+        version: 2.103.0
       axios:
         specifier: ^1.15.0
         version: 1.15.0
@@ -106,6 +109,9 @@ importers:
       '@playwright/test':
         specifier: ^1.42.1
         version: 1.59.1
+      '@supabase/supabase-js':
+        specifier: ^2.39.7
+        version: 2.103.0
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@20.19.39)
