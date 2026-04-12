@@ -17,14 +17,16 @@ services:
           property: connectionString
       - key: SUPABASE_URL
           : false
-            sync- key: SUPABASE_KEY
+                          - key: SUPABASE_KEY
+        sync: false
+        - key: SUPABASE_KEY
         sync: false
          - type: worker
         name: qa-worker
         env: node
         plan: free
         buildCommand: pnpm install && pnpm --filter @qa/core build && pnpm --filter @qa/workers build
-        startCommand: pnpm --filter @qa/workers start
+            startCommand: pnpm --filter @qa/workers start
         envVars:
             - key: NODE_ENV
                 value: production
