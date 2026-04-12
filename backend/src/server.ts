@@ -9,84 +9,93 @@ dotenv.config()
 const app = express()
 const port = process.env.PORT || 3001
 
-// Setup Supabase (Mocked if no creds)
+// Setup Supabase (Using Service Role for orchestrator tasks if available)
 const supabaseUrl = process.env.SUPABASE_URL || 'https://mock.supabase.co'
 const supabaseKey = process.env.SUPABASE_KEY || 'mock-key'
 export const supabase = createClient(supabaseUrl, supabaseKey)
 
-import { EventEmitter } from 'events'
-export const simulationEvents = new EventEmitter()
-
-// Setup Redis Queue with Simulation Fallback
-let testQueue: any
+// Setup Redis Queue
 const connection = {
   host: process.env.REDIS_HOST || 'localhost',
   port: parseInt(process.env.REDIS_PORT || '6379'),
   maxRetriesPerRequest: null
 }
 
-try {
-  const q = new Queue('test-runs', { connection })
-  q.on('error', (err) => {
-    console.warn('[Backend] Redis error. Continuing in simulation mode.')
-  })
-  testQueue = q
-  console.log('[Backend] Redis Queue initialized.')
-} catch (err) {
-  console.warn('[Backend] Redis failed to initialize. Simulation Mode Active.')
-  testQueue = null
-}
-
-function getTestQueue() {
-  if (testQueue && !process.env.SIMULATE) {
-    return testQueue
-  }
-  return {
-    add: async (name: string, data: any) => {
-      const id = Math.random().toString(36).substring(7)
-      setTimeout(() => simulationEvents.emit('job', { id, name, data }), 100)
-      return { id }
-    }
-  }
-}
+const testQueue = new Queue('test-runs', { connection })
 
 app.use(cors())
 app.use(express.json())
 
-app.post('/run-test', async (req, res) => {
-  const { testName, tenantId } = req.body
-  const queue = getTestQueue()
-  
-  const job = await queue.add('run-single-test', {
-    testName,
-    tenantId,
-    timestamp: new Date()
-  })
-
-  res.json({ success: true, jobId: job.id, mode: testQueue ? 'redis' : 'simulation' })
-})
-
 app.post('/run-suite', async (req, res) => {
-  const { suiteName } = req.body
-  const queue = getTestQueue()
+  const { suiteName, tenantId = 'default-tenant' } = req.body
   
-  // In a real app, this would query a list of tests for the suite
-  const tests = ['login', 'tenant-isolation', 'subscription']
-  
+  // 1. Create a Test Run Record in Supabase
+  const { data: run, error } = await supabase
+    .from('test_runs')
+    .insert({
+      suite_name: suiteName,
+      status: 'queued',
+      tenant_id: tenantId,
+      started_at: new Date().toISOString()
+    })
+    .select()
+    .single()
+
+  if (error) {
+    console.error('[Backend] Supabase Error:', error)
+    return res.status(500).json({ success: false, error: error.message })
+  }
+
+  // 2. Queue the individual tests
+  const tests = ['login-validation', 'tenant-isolation', 'api-performance']
   const jobs = await Promise.all(tests.map(testName => 
-    queue.add('run-single-test', { testName, suiteName })
+    testQueue.add('execute-test', { 
+      testName, 
+      runId: run.id,
+      tenantId 
+    })
   ))
 
-  res.json({ success: true, count: jobs.length, mode: testQueue ? 'redis' : 'simulation' })
+  res.json({ 
+    success: true, 
+    runId: run.id, 
+    jobCount: jobs.length,
+    status: 'scheduled'
+  })
 })
 
 app.get('/test-history', async (req, res) => {
-  // In a real app, this queries Supabase
-  // Mocking for now
-  res.json([
-    { id: '1', name: 'login', status: 'passed', duration: 1200, timestamp: new Date() },
-    { id: '2', name: 'tenant-isolation', status: 'failed', duration: 2500, timestamp: new Date() }
-  ])
+  const { data, error } = await supabase
+    .from('test_runs')
+    .select('*, test_results(*)')
+    .order('started_at', { ascending: false })
+    .limit(20)
+
+  if (error) {
+    return res.status(500).json({ success: false, error: error.message })
+  }
+
+  res.json(data)
+})
+
+app.get('/health-stats', async (req, res) => {
+  const { data: runs, error } = await supabase
+    .from('test_runs')
+    .select('status, passed_tests, failed_tests')
+    .limit(50)
+
+  if (error) return res.status(500).json({ error: error.message })
+
+  const totalRuns = runs.length
+  const successRuns = runs.filter(r => r.status === 'passed').length
+  const passRate = totalRuns > 0 ? (successRuns / totalRuns * 100) : 0
+
+  res.json({
+    totalRuns,
+    passRate: Math.round(passRate),
+    activeWorkers: 3, // Mocked for now
+    flakyTests: 2 // Mocked for now
+  })
 })
 
 app.listen(port, () => {

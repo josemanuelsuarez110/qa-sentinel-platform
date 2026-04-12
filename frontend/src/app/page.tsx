@@ -1,10 +1,51 @@
-import { Activity, CheckCircle2, XCircle, Clock, AlertTriangle } from 'lucide-react'
+'use client'
+
+import { useEffect, useState } from 'react'
+import { Activity, Clock, AlertTriangle } from 'lucide-react'
 import Header from '@/components/Header'
 import StatsOverview from '@/components/StatsOverview'
 import TestHistoryTable from '@/components/TestHistoryTable'
 import HealthChart from '@/components/HealthChart'
 
 export default function Dashboard() {
+  const [stats, setStats] = useState({ totalRuns: 0, passRate: 0, failCount: 0 })
+  const [history, setHistory] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  const fetchData = async () => {
+    try {
+      const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'
+      const [statsRes, historyRes] = await Promise.all([
+        fetch(`${baseUrl}/health-stats`),
+        fetch(`${baseUrl}/test-history`)
+      ])
+
+      if (statsRes.ok) setStats(await statsRes.json())
+      if (historyRes.ok) {
+        // We flatten the results from test_runs
+        const runsData = await historyRes.json()
+        const flatResults = runsData.flatMap((run: any) => 
+          (run.test_results || []).map((res: any) => ({
+            ...res,
+            suite_name: run.suite_name,
+            tenant_id: run.tenant_id
+          }))
+        )
+        setHistory(flatResults.slice(0, 10))
+      }
+    } catch (err) {
+      console.error('Failed to fetch dashboard data:', err)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchData()
+    const interval = setInterval(fetchData, 10000) // Poll every 10s
+    return () => clearInterval(interval)
+  }, [])
+
   return (
     <main className="min-h-screen bg-[#0a0a0b] text-slate-50">
       <Header />
@@ -21,7 +62,7 @@ export default function Dashboard() {
         </section>
 
         {/* Stats Grid */}
-        <StatsOverview />
+        <StatsOverview stats={stats} />
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Charts Area */}
@@ -43,7 +84,13 @@ export default function Dashboard() {
                 <Clock className="w-5 h-5 text-purple-400" />
                 Recent Test History
               </h3>
-              <TestHistoryTable />
+              {loading ? (
+                <div className="h-40 flex items-center justify-center text-slate-500">
+                  Loading activity...
+                </div>
+              ) : (
+                <TestHistoryTable history={history} />
+              )}
             </div>
           </div>
 
@@ -65,7 +112,18 @@ export default function Dashboard() {
             <div className="glass p-6 rounded-2xl">
               <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
               <div className="space-y-3">
-                <button className="w-full py-2.5 bg-blue-600 hover:bg-blue-500 transition-colors rounded-xl font-medium text-sm">
+                <button 
+                  onClick={async () => {
+                    const baseUrl = 'http://localhost:3001'
+                    await fetch(`${baseUrl}/run-suite`, {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ suiteName: 'Smoke Test', tenantId: 'demo-tenant' })
+                    })
+                    fetchData()
+                  }}
+                  className="w-full py-2.5 bg-blue-600 hover:bg-blue-500 transition-colors rounded-xl font-medium text-sm"
+                >
                   Trigger Smoke Suite
                 </button>
                 <button className="w-full py-2.5 bg-slate-800 hover:bg-slate-700 transition-colors rounded-xl font-medium text-sm">

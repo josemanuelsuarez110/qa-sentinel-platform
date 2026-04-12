@@ -8,7 +8,7 @@ export interface TestResult {
   name: string
   status: 'passed' | 'failed' | 'flaky' | 'timedOut'
   duration: number
-  error?: string
+  errorMessage?: string
   retries: number
   startTime: Date
 }
@@ -24,7 +24,7 @@ export class TestRunner {
     this.reporter = new Reporter()
   }
 
-  async runTest(testFn: () => Promise<void>, name: string): Promise<TestResult> {
+  async runTest(testFn: () => Promise<void>, name: string, runId?: string): Promise<TestResult> {
     const startTime = new Date()
     let retries = 0
     let lastError: Error | undefined
@@ -48,7 +48,7 @@ export class TestRunner {
           await this.flakyDetector.recordInstability(name, lastError?.message)
         }
 
-        await this.reporter.report(result)
+        await this.reporter.report(result, runId)
         return result
 
       } catch (err: any) {
@@ -66,12 +66,12 @@ export class TestRunner {
       name,
       status: 'failed',
       duration: new Date().getTime() - startTime.getTime(),
-      error: lastError?.message,
+      errorMessage: lastError?.message,
       retries: retries - 1,
       startTime
     }
 
-    await this.reporter.report(failedResult)
+    await this.reporter.report(failedResult, runId)
     return failedResult
   }
 }

@@ -1,13 +1,26 @@
 import { CheckCircle2, XCircle, RefreshCcw } from 'lucide-react'
 
-const history = [
-  { id: '829', name: 'Auth Isolation check', tenant: 'Tenant-A', status: 'passed', time: '2m ago' },
-  { id: '828', name: 'Subscription Webhook', tenant: 'Tenant-B', status: 'failed', time: '15m ago' },
-  { id: '827', name: 'Login Smoke', tenant: 'Any', status: 'passed', time: '1h ago' },
-  { id: '826', name: 'Data Leak Analysis', tenant: 'Tenant-C', status: 'flaky', time: '3h ago' },
-]
+interface TestHistoryItem {
+  id: string
+  test_name: string
+  tenant_id?: string
+  status: string
+  created_at: string
+}
 
-export default function TestHistoryTable() {
+interface TestHistoryTableProps {
+  history: TestHistoryItem[]
+}
+
+export default function TestHistoryTable({ history }: TestHistoryTableProps) {
+  if (!history || history.length === 0) {
+    return (
+      <div className="py-12 text-center text-slate-500 text-sm italic">
+        No recent test execution history found.
+      </div>
+    )
+  }
+
   return (
     <div className="overflow-x-auto">
       <table className="w-full text-left border-collapse">
@@ -22,12 +35,14 @@ export default function TestHistoryTable() {
         <tbody className="divide-y divide-slate-800/50">
           {history.map((row) => (
             <tr key={row.id} className="group hover:bg-slate-800/20 transition-colors">
-              <td className="py-4 px-2 text-sm font-medium">{row.name}</td>
-              <td className="py-4 px-2 text-sm text-slate-400 font-mono text-xs">{row.tenant}</td>
+              <td className="py-4 px-2 text-sm font-medium">{row.test_name}</td>
+              <td className="py-4 px-2 text-sm text-slate-400 font-mono text-xs">{row.tenant_id || 'Global'}</td>
               <td className="py-4 px-2">
                 <StatusBadge status={row.status} />
               </td>
-              <td className="py-4 px-2 text-xs text-slate-500 text-right">{row.time}</td>
+              <td className="py-4 px-2 text-xs text-slate-500 text-right">
+                {new Date(row.created_at).toLocaleTimeString()}
+              </td>
             </tr>
           ))}
         </tbody>
