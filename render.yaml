@@ -16,11 +16,10 @@ services:
           name: qa-redis
           property: connectionString
       - key: SUPABASE_URL
+          : false
+            sync- key: SUPABASE_KEY
         sync: false
-      - key: SUPABASE_KEY
-        sync: false
-
-          - type: worker
+         - type: worker
         name: qa-worker
         env: node
         plan: free
