@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test('dashboard displays stats', async ({ page }) => {
-  await page.goto('http://localhost:3000/dashboard');
+  await page.goto('/dashboard');
   
   // Basic check for dashboard content
   await expect(page.locator('h1')).toBeVisible();

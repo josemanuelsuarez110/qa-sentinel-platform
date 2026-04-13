@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test('user can login', async ({ page }) => {
-  await page.goto('http://localhost:3000');
+  await page.goto('/');
 
   // Verify elements exist before interaction
   await page.click('text=Login');
