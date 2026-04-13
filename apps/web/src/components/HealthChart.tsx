@@ -2,17 +2,19 @@
 
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts'
 
-const data = [
-  { time: '00:00', pass: 95, fail: 5 },
-  { time: '04:00', pass: 98, fail: 2 },
-  { time: '08:00', pass: 92, fail: 8 },
-  { time: '12:00', pass: 99, fail: 1 },
-  { time: '16:00', pass: 97, fail: 3 },
-  { time: '20:00', pass: 96, fail: 4 },
-  { time: '23:59', pass: 100, fail: 0 },
-]
+interface HealthChartProps {
+  data: { time: string; pass: number; fail: number }[]
+}
 
-export default function HealthChart() {
+export default function HealthChart({ data }: HealthChartProps) {
+  if (!data || data.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-full text-slate-500 text-sm">
+        No trend data available for the current period.
+      </div>
+    )
+  }
+
   return (
     <ResponsiveContainer width="100%" height="100%">
       <AreaChart data={data}>

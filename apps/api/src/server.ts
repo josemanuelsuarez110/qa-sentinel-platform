@@ -109,23 +109,71 @@ app.get('/test-history', async (req, res) => {
 })
 
 app.get('/health-stats', async (req, res) => {
-  const { data: runs, error } = await supabase
-    .from('test_runs')
-    .select('status, passed_tests, failed_tests')
-    .limit(50)
+  try {
+    const { data: runs, error: runsError } = await supabase
+      .from('test_runs')
+      .select('status, passed_tests, failed_tests, duration_ms')
+      .limit(100)
 
-  if (error) return res.status(500).json({ error: error.message })
+    if (runsError) throw runsError
 
-  const totalRuns = runs.length
-  const successRuns = runs.filter(r => r.status === 'passed').length
-  const passRate = totalRuns > 0 ? (successRuns / totalRuns * 100) : 0
+    const { count: flakyCount } = await supabase
+      .from('flaky_history')
+      .select('*', { count: 'exact', head: true })
 
-  res.json({
-    totalRuns,
-    passRate: Math.round(passRate),
-    activeWorkers: 3, // Mocked for now
-    flakyTests: 2 // Mocked for now
-  })
+    const totalRuns = runs.length
+    const successRuns = runs.filter(r => r.status === 'passed').length
+    const failCount = runs.reduce((acc, r) => acc + (r.failed_tests || 0), 0)
+    const passRate = totalRuns > 0 ? (successRuns / totalRuns * 100) : 0
+    
+    const validDurations = runs.filter(r => r.duration_ms).map(r => r.duration_ms as number)
+    const avgDurationMs = validDurations.length > 0
+      ? validDurations.reduce((a, b) => a + b, 0) / validDurations.length
+      : 0
+
+    // Get real active workers count from BullMQ
+    const jobCounts = await testQueue.getJobCounts()
+
+    res.json({
+      totalRuns,
+      passRate: Math.round(passRate),
+      failCount,
+      avgDuration: avgDurationMs > 0 ? `${(avgDurationMs / 1000 / 60).toFixed(1)}m` : '0m',
+      activeWorkers: jobCounts.active || 0,
+      flakyTests: flakyCount || 0
+    })
+  } catch (err: any) {
+    res.status(500).json({ error: err.message })
+  }
+})
+
+// --- NEW: Real Historical Trends ---
+app.get('/execution-trends', async (req, res) => {
+  try {
+    const { data: results, error } = await supabase
+      .from('test_results')
+      .select('status, created_at')
+      .order('created_at', { ascending: true })
+      .limit(500)
+
+    if (error) throw error
+
+    // Group by hour
+    const trends = results.reduce((acc: any, curr) => {
+      const date = new Date(curr.created_at)
+      const hour = `${date.getHours().toString().padStart(2, '0')}:00`
+      
+      if (!acc[hour]) acc[hour] = { time: hour, pass: 0, fail: 0 }
+      if (curr.status === 'passed') acc[hour].pass++
+      else if (curr.status === 'failed') acc[hour].fail++
+      
+      return acc
+    }, {})
+
+    res.json(Object.values(trends))
+  } catch (err: any) {
+    res.status(500).json({ error: err.message })
+  }
 })
 
 // --- NEW: Smart Test Insights ---

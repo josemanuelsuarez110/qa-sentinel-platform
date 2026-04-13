@@ -1,4 +1,5 @@
 import { test as base, expect } from '@playwright/test'
+import crypto from 'crypto'
 import { RetryHandler } from './retryHandler'
 import { FlakyDetector } from './flakyDetector'
 import { Reporter } from './reporter'
@@ -53,7 +54,7 @@ export class TestRunner {
       }
 
       const testResult: TestResult = {
-        id: Math.random().toString(36).substring(7),
+        id: crypto.randomUUID(),
         name,
         status: status as any,
         duration: result?.duration || 0,
@@ -77,7 +78,7 @@ export class TestRunner {
           const result = testCase?.results[0]
           
           const failedResult: TestResult = {
-            id: Math.random().toString(36).substring(7),
+            id: crypto.randomUUID(),
             name,
             status: 'failed',
             duration: result?.duration || 0,
@@ -93,7 +94,7 @@ export class TestRunner {
       }
 
       const errorResult: TestResult = {
-        id: Math.random().toString(36).substring(7),
+        id: crypto.randomUUID(),
         name,
         status: 'failed',
         duration: 0,
@@ -118,7 +119,7 @@ export class TestRunner {
         
         const status = retries > 0 ? 'flaky' : 'passed'
         const result: TestResult = {
-          id: Math.random().toString(36).substring(7),
+          id: crypto.randomUUID(),
           name,
           status,
           duration: new Date().getTime() - startTime.getTime(),
@@ -144,7 +145,7 @@ export class TestRunner {
     }
 
     const failedResult: TestResult = {
-      id: Math.random().toString(36).substring(7),
+      id: crypto.randomUUID(),
       name,
       status: 'failed',
       duration: new Date().getTime() - startTime.getTime(),

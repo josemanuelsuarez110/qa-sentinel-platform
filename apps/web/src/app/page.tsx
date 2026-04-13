@@ -11,23 +11,22 @@ import SmartInsights from '@/components/SmartInsights'
 import QuickActions from '@/components/QuickActions'
 
 export default function Dashboard() {
-  const [stats, setStats] = useState({ totalRuns: 0, passRate: 0, failCount: 0 })
+  const [stats, setStats] = useState({ totalRuns: 0, passRate: 0, failCount: 0, avgDuration: '0m', activeWorkers: 0, flakyTests: 0 })
   const [history, setHistory] = useState([])
+  const [trends, setTrends] = useState([])
   const [loading, setLoading] = useState(true)
 
   const fetchData = useCallback(async () => {
     try {
-      const baseUrl = process.env.NEXT_PUBLIC_API_URL || ''
-      if (!baseUrl) {
-        setLoading(false)
-        return
-      }
-      const [statsRes, historyRes] = await Promise.all([
+      const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'
+      const [statsRes, historyRes, trendsRes] = await Promise.all([
         fetch(`${baseUrl}/health-stats`),
-        fetch(`${baseUrl}/test-history`)
+        fetch(`${baseUrl}/test-history`),
+        fetch(`${baseUrl}/execution-trends`)
       ])
 
       if (statsRes.ok) setStats(await statsRes.json())
+      if (trendsRes.ok) setTrends(await trendsRes.json())
       if (historyRes.ok) {
         const runsData = await historyRes.json()
         const flatResults = runsData.flatMap((run: any) =>
@@ -81,7 +80,7 @@ export default function Dashboard() {
                 </h3>
               </div>
               <div className="h-[300px] w-full">
-                <HealthChart />
+                <HealthChart data={trends} />
               </div>
             </div>
 
