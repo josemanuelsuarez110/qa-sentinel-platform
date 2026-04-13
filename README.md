@@ -62,7 +62,29 @@ pnpm test:e2e
 
 ---
 
-## 🧪 Example Scenarios
-- **Isolation**: `tests/e2e/multi-tenant.spec.ts`
-- **Authentication**: `tests/e2e/login.spec.ts`
-- **Flakiness**: `packages/qa-core/src/flakyDetector.ts`
+## 🧪 Quick Reference (Snippets)
+
+### Orchestrator Mockup
+If you need a quick local runner outside the monorepo:
+```javascript
+const express = require('express');
+const { exec } = require('child_process');
+const app = express();
+
+app.post('/run-tests', (req, res) => {
+  exec('pnpm test:e2e', (err, stdout) => {
+    res.json({ status: 'done', raw: stdout });
+  });
+});
+```
+
+### Basic Test Scenario
+```typescript
+test('homepage loads', async ({ page }) => {
+  await page.goto('https://qa-sentinel-platform.vercel.app/');
+  await expect(page).toHaveTitle(/QA/);
+});
+```
+
+### GitHub Pipeline
+The platform uses an optimized pnpm workflow located in `.github/workflows/qa.yml`.
