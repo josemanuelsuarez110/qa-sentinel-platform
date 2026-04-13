@@ -1,14 +1,14 @@
 {
   "name": "tu-proyecto",
   "version": "0.1.0",
-  "packageManager": "pnpm@8.15.9",
+  "packageManager": "pnpm@9.12.3",
   "private": true,
   "engines": {
-    "node": "18.x"
+    "node": ">=20.x"
   },
   "description": "Production-grade, self-healing QA automation platform for SaaS",
   "scripts": {
-    "preinstall": "npx -y pnpm@8.15.9 --version",
+    "preinstall": "npx -y pnpm@9.12.3 --version",
     "dev": "pnpm -r --parallel run dev",
     "build": "pnpm -r run build",
     "setup": "pnpm install && npx playwright install --with-deps",
