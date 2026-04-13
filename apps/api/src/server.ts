@@ -1,6 +1,6 @@
 import express from 'express'
 import cors from 'cors'
-import dotenv from 'dotenv'
+import * as dotenv from 'dotenv'
 import { Queue, Worker, Job } from 'bullmq'
 import { createClient } from '@supabase/supabase-js'
 import { TestRunner } from '@qa/core'
@@ -33,7 +33,8 @@ const testRegistry: Record<string, string> = {
   'core-platform': 'tests/e2e/core-platform.spec.ts',
   'login-validation': 'tests/e2e/login.spec.ts',
   'tenant-isolation': 'tests/e2e/multi-tenant.spec.ts',
-  'api-performance': 'tests/e2e/dashboard.spec.ts'
+  'api-performance': 'tests/e2e/dashboard.spec.ts',
+  'critical-flow': 'tests/e2e/critical-flow.spec.ts'
 }
 
 // Initialize the worker in the same process
@@ -76,7 +77,7 @@ app.post('/run-suite', async (req, res) => {
   }
 
   // 2. Queue the individual tests
-  const tests = ['core-platform', 'login-validation', 'tenant-isolation', 'api-performance']
+  const tests = Object.keys(testRegistry)
   const jobs = await Promise.all(tests.map(testName => 
     testQueue.add('execute-test', { 
       testName, 

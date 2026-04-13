@@ -14,14 +14,7 @@ export default function QuickActions({ onRefresh }: QuickActionsProps) {
   const handleTriggerSuite = async () => {
     setTriggerState('loading')
     try {
-      const baseUrl = process.env.NEXT_PUBLIC_API_URL || ''
-      if (!baseUrl) {
-        // Simular un éxito visual cuando no hay backend todavía
-        await new Promise(r => setTimeout(r, 1200))
-        setTriggerState('success')
-        setTimeout(() => setTriggerState('idle'), 3000)
-        return
-      }
+      const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'
       const res = await fetch(`${baseUrl}/run-suite`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

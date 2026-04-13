@@ -25,3 +25,8 @@
 Thumbs.db
 
 .vercel
+
+**/*.js
+**/*.d.ts
+**/*.js.map
+!**/node_modules/**
