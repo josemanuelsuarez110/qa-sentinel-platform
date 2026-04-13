@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "packageManager": "pnpm@9.15.4",
   "private": true,
+  "engines": {
+    "node": "20.15.0"
+  },
   "description": "Production-grade, self-healing QA automation platform for SaaS",
   "scripts": {
     "dev": "pnpm -r --parallel run dev",
