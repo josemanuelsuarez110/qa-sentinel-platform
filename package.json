@@ -1,10 +1,10 @@
 {
-  "name": "qa-automation-platform",
-  "version": "1.0.0",
+  "name": "tu-proyecto",
+  "version": "0.1.0",
   "packageManager": "pnpm@9.12.3",
   "private": true,
   "engines": {
-    "node": "18.x"
+    "node": "20.x"
   },
   "description": "Production-grade, self-healing QA automation platform for SaaS",
   "scripts": {
