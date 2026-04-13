@@ -1,7 +1,6 @@
 {
   "name": "tu-proyecto",
   "version": "0.1.0",
-  "packageManager": "pnpm@9.12.3",
   "private": true,
   "engines": {
     "node": "20.x"
