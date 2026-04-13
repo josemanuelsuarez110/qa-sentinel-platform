@@ -28,29 +28,12 @@ const connection = redisUrl
 const testQueue = new Queue('test-runs', { connection: connection as any })
 const runner = new TestRunner()
 
-// --- Multi-process Worker (Embedded) ---
-const testRegistry: Record<string, () => Promise<void>> = {
-  'login-validation': async () => {
-    console.log('[Worker] Running login validation...')
-    await new Promise(r => setTimeout(r, 800))
-  },
-  'tenant-isolation': async () => {
-    console.log('[Worker] Running tenant isolation test...')
-    if (Math.random() < 0.3) {
-      throw new Error('Tenant data cross-contamination detected!')
-    }
-    await new Promise(r => setTimeout(r, 1500))
-  },
-  'api-performance': async () => {
-    console.log('[Worker] Running API performance test...')
-    await new Promise(r => setTimeout(r, 600))
-  },
-  'login': async () => {
-    await new Promise(r => setTimeout(r, 1000))
-  },
-  'subscription': async () => {
-    await new Promise(r => setTimeout(r, 800))
-  }
+// --- Multi-process Worker (Real Testing Integration) ---
+const testRegistry: Record<string, string> = {
+  'core-platform': 'tests/e2e/core-platform.spec.ts',
+  'login-validation': 'tests/e2e/login.spec.ts',
+  'tenant-isolation': 'tests/e2e/multi-tenant.spec.ts',
+  'api-performance': 'tests/e2e/dashboard.spec.ts'
 }
 
 // Initialize the worker in the same process
@@ -58,10 +41,11 @@ const worker = new Worker('test-runs', async (job: Job) => {
   const { testName, runId } = job.data
   console.log(`[Worker] Processing: ${testName} | Run: ${runId}`)
 
-  const testFn = testRegistry[testName]
-  if (!testFn) throw new Error(`Test not found: ${testName}`)
+  const testFilePath = testRegistry[testName]
+  if (!testFilePath) throw new Error(`Test file not found for: ${testName}`)
 
-  return await runner.runTest(testFn, testName, runId)
+  // Execute the REAL playwright test instead of the simulated function
+  return await runner.runRealTest(testFilePath, testName, runId)
 }, { connection: connection as any })
 
 worker.on('failed', (job, err) => console.error(`[Worker] Job ${job?.id} failed: ${err.message}`))
@@ -92,7 +76,7 @@ app.post('/run-suite', async (req, res) => {
   }
 
   // 2. Queue the individual tests
-  const tests = ['login-validation', 'tenant-isolation', 'api-performance']
+  const tests = ['core-platform', 'login-validation', 'tenant-isolation', 'api-performance']
   const jobs = await Promise.all(tests.map(testName => 
     testQueue.add('execute-test', { 
       testName, 
