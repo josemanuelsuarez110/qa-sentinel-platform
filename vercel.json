@@ -1,7 +1,6 @@
 {
   "name": "qa-sentinel-platform",
   "framework": "nextjs",
-  "installCommand": "pnpm install",
-  "buildCommand": "pnpm build",
+  "installCommand": "corepack enable && corepack prepare pnpm@9.12.3 --activate && pnpm install",
   "ignoreCommand": "git diff --quiet HEAD^ HEAD ."
 }

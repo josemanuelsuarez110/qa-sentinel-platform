@@ -1,14 +1,14 @@
 {
   "name": "qa-automation-platform",
   "version": "1.0.0",
-  "packageManager": "pnpm@9.15.4",
+  "packageManager": "pnpm@9.12.3",
   "private": true,
   "engines": {
-    "node": ">=20.15.0"
+    "node": "18.x"
   },
   "description": "Production-grade, self-healing QA automation platform for SaaS",
   "scripts": {
-    "preinstall": "npx -y pnpm@9.15.4 --version",
+    "preinstall": "npx -y pnpm@9.12.3 --version",
     "dev": "pnpm -r --parallel run dev",
     "build": "pnpm -r run build",
     "setup": "pnpm install && npx playwright install --with-deps",
