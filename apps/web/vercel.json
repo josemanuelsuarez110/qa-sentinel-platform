@@ -1,6 +1,5 @@
 {
   "framework": "nextjs",
-  "rootDirectory": "apps/web",
   "installCommand": "true",
   "buildCommand": "npm install -g pnpm@9.12.3 && pnpm install --dir ../.. --no-frozen-lockfile && next build"
 }
