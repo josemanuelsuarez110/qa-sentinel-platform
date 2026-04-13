@@ -4,7 +4,7 @@
   "private": true,
   "packageManager": "pnpm@9.12.3",
   "engines": {
-    "node": "18.x"
+    "node": "20.x"
   },
   "scripts": {
     "dev": "next dev",
@@ -17,9 +17,9 @@
     "axios": "^1.15.0",
     "clsx": "^2.1.1",
     "lucide-react": "^1.8.0",
-    "next": "latest",
-    "react": "latest",
-    "react-dom": "latest",
+    "next": "14.x",
+    "react": "18.x",
+    "react-dom": "18.x",
     "recharts": "^3.8.1",
     "tailwind-merge": "^3.5.0"
   },
@@ -29,7 +29,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.2.3",
+    "eslint-config-next": "14.x",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

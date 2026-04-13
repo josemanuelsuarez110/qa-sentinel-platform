@@ -5,7 +5,8 @@ import { Queue, Worker, Job } from 'bullmq'
 import { createClient } from '@supabase/supabase-js'
 import { TestRunner } from '@qa/core'
 
-dotenv.config()
+import path from 'path'
+dotenv.config({ path: path.resolve(__dirname, '../../../.env') })
 
 const app = express()
 const port = process.env.PORT || 3001

@@ -1,8 +1,9 @@
 import { Worker, Job } from 'bullmq'
 import { TestRunner } from '@qa/core'
 import dotenv from 'dotenv'
+import path from 'path'
 
-dotenv.config()
+dotenv.config({ path: path.resolve(__dirname, '../../../.env') })
 
 const redisUrl = process.env.REDIS_URL
 const connection = redisUrl

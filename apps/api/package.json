@@ -1,6 +1,9 @@
 {
   "name": "@qa/backend",
   "version": "1.0.0",
+  "engines": {
+    "node": "20.x"
+  },
   "main": "dist/server.js",
   "scripts": {
     "start": "tsx src/server.ts",

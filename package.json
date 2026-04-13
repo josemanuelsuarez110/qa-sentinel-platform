@@ -4,13 +4,14 @@
   "packageManager": "pnpm@9.12.3",
   "private": true,
   "engines": {
-    "node": "18.x"
+    "node": "20.x"
   },
   "description": "Production-grade, self-healing QA automation platform for SaaS",
   "scripts": {
     "preinstall": "npx -y pnpm@9.12.3 --version",
     "dev": "pnpm -r --parallel run dev",
     "build": "pnpm -r run build",
+    "db:seed": "tsx scripts/populate-sample-data.ts",
     "setup": "pnpm install && npx playwright install --with-deps",
     "test:e2e": "npx playwright test",
     "clean": "npx rimraf **/node_modules **/dist **/.next",
@@ -22,5 +23,10 @@
     "typescript": "^5.3.3",
     "tsx": "^4.7.1",
     "rimraf": "^5.0.5"
+  },
+  "dependencies": {
+    "next": "14.x",
+    "react": "18.x",
+    "react-dom": "18.x"
   }
 }
