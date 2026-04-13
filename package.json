@@ -4,7 +4,7 @@
   "packageManager": "pnpm@9.12.3",
   "private": true,
   "engines": {
-    "node": ">=20.x"
+    "node": "18.x"
   },
   "description": "Production-grade, self-healing QA automation platform for SaaS",
   "scripts": {
