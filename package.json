@@ -4,10 +4,11 @@
   "packageManager": "pnpm@9.15.4",
   "private": true,
   "engines": {
-    "node": "20.15.0"
+    "node": ">=20.15.0"
   },
   "description": "Production-grade, self-healing QA automation platform for SaaS",
   "scripts": {
+    "preinstall": "npx -y pnpm@9.15.4 --version",
     "dev": "pnpm -r --parallel run dev",
     "build": "pnpm -r run build",
     "setup": "pnpm install && npx playwright install --with-deps",
