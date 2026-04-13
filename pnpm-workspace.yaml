@@ -1,7 +1,5 @@
 packages:
-  - 'backend'
-  - 'frontend'
-  - 'qa-core'
-  - 'workers'
+  - 'apps/*'
+  - 'packages/*'
   - 'tests'
   - 'extension'

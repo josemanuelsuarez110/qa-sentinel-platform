@@ -143,6 +143,80 @@ app.get('/health-stats', async (req, res) => {
   })
 })
 
+// --- NEW: Smart Test Insights ---
+app.get('/test-insights', async (req, res) => {
+  try {
+    // 1. Most Unstable Test (highest fail count from flaky_history)
+    const { data: flakyData } = await supabase
+      .from('flaky_history')
+      .select('test_name, fail_count')
+      .order('fail_count', { ascending: false })
+      .limit(1)
+      .single()
+
+    // 2. Average Duration (from last 50 successful tests)
+    const { data: durationData } = await supabase
+      .from('test_results')
+      .select('duration_ms')
+      .eq('status', 'passed')
+      .limit(50)
+    
+    const avgDuration = durationData?.length 
+      ? Math.round(durationData.reduce((acc, curr) => acc + curr.duration_ms, 0) / durationData.length)
+      : 0
+
+    // 3. Recurring Failures (tests that failed > 2 times in last 24h)
+    const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
+    const { data: failureData } = await supabase
+      .from('test_results')
+      .select('test_name')
+      .eq('status', 'failed')
+      .gt('created_at', yesterday)
+    
+    const recurringFailures = Object.entries(
+      failureData?.reduce((acc: any, curr) => {
+        acc[curr.test_name] = (acc[curr.test_name] || 0) + 1
+        return acc
+      }, {}) || {}
+    )
+    .filter(([_, count]: any) => count > 1)
+    .map(([name, count]) => ({ name, count }))
+
+    res.json({
+      mostUnstable: flakyData?.test_name || 'None detected',
+      avgDurationMs: avgDuration,
+      recurringFailures
+    })
+  } catch (err: any) {
+    res.status(500).json({ error: err.message })
+  }
+})
+
+// --- NEW: Simulated AI Diagnostic ---
+app.post('/generate-ai-summary', async (req, res) => {
+  const { testName, lastError } = req.body
+  
+  // Simulate AI latency
+  await new Promise(r => setTimeout(r, 1200))
+
+  const analysis = lastError?.includes('contamination')
+    ? `ANALYSIS: The failure in '${testName}' suggests a state leakage between test iterations. RECOMMENDATION: Review the database teardown logic for the shared environment.`
+    : lastError?.includes('timeout')
+    ? `ANALYSIS: Network latency or resource exhaustion detected in the test worker. RECOMMENDATION: Increase the Playwright timeout or check worker CPU allocation.`
+    : `ANALYSIS: Standard functional failure detected. RECOMMENDATION: Verify the application logic for recent regression in '${testName}'.`
+
+  res.json({
+    summary: analysis,
+    confidence: 0.94,
+    generated_at: new Date().toISOString()
+  })
+})
+
+// Serve evidence statically
+import path from 'path'
+const testResultsPath = path.resolve(process.cwd(), '../../test-results')
+app.use('/evidence', express.static(testResultsPath))
+
 app.listen(port, () => {
   console.log(`[Backend] Orchestrator running at http://localhost:${port}`)
 })

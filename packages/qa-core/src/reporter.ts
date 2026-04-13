@@ -22,7 +22,9 @@ export class Reporter {
         duration_ms: result.duration,
         error_message: result.errorMessage,
         retries: result.retries || 0,
-        created_at: result.startTime.toISOString()
+        created_at: result.startTime.toISOString(),
+        screenshot_url: result.screenshotPath,
+        video_url: result.videoPath
       })
 
     if (error) {

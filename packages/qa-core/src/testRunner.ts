@@ -11,6 +11,8 @@ export interface TestResult {
   errorMessage?: string
   retries: number
   startTime: Date
+  screenshotPath?: string
+  videoPath?: string
 }
 
 export class TestRunner {

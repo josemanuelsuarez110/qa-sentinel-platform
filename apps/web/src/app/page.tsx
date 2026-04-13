@@ -7,6 +7,7 @@ import StatsOverview from '@/components/StatsOverview'
 import TestHistoryTable from '@/components/TestHistoryTable'
 import HealthChart from '@/components/HealthChart'
 import FlakyAlerts from '@/components/FlakyAlerts'
+import SmartInsights from '@/components/SmartInsights'
 import QuickActions from '@/components/QuickActions'
 
 export default function Dashboard() {
@@ -101,6 +102,7 @@ export default function Dashboard() {
 
           {/* Sidebar */}
           <div className="space-y-6">
+            <SmartInsights />
             <FlakyAlerts />
             <QuickActions onRefresh={fetchData} />
           </div>

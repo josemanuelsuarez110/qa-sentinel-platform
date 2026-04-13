@@ -55,11 +55,28 @@ const worker = new Worker('test-runs', async (job: Job) => {
 }, { connection: connection as any })
 
 worker.on('failed', (job: any, err: any) => {
-  console.error(`[Worker] Job ${job?.id} failed: ${err.message}`)
+  console.error(`[Worker] ❌ Job ${job?.id} failed: ${err.message}`)
 })
 
 worker.on('error', (err) => {
-  console.error('[Worker] Redis connection error:', err.message)
+  console.error('[Worker] 🛑 Redis connection error:', err.message)
 })
 
-console.log('[Worker] Distributed Test Worker running and listening for jobs...')
+// --- NEW: Self-Healing & Health Monitoring ---
+const heartbeat = setInterval(async () => {
+  try {
+    const isPaused = await worker.isPaused()
+    const count = await worker.getJobCounts()
+    console.log(`[Worker] ❤️ Heartbeat | Paused: ${isPaused} | Jobs: ${JSON.stringify(count)}`)
+  } catch (err: any) {
+    console.warn('[Worker] ⚠️ Heartbeat failed: Redis reachability issue.')
+  }
+}, 30000)
+
+process.on('SIGTERM', async () => {
+  clearInterval(heartbeat)
+  await worker.close()
+  process.exit(0)
+})
+
+console.log('[Worker] 🚀 Distributed Test Worker active and monitoring queue...')

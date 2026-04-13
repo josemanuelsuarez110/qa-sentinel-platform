@@ -6,7 +6,8 @@
     "strict": true,
     "baseUrl": ".",
     "paths": {
-      "@qa-core/*": ["qa-core/src/*"]
+      "@qa/core": ["packages/qa-core/src/index.ts"],
+      "@qa/core/*": ["packages/qa-core/src/*"]
     },
     "esModuleInterop": true,
     "skipLibCheck": true,
