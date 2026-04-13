@@ -1,4 +1,5 @@
 {
   "name": "qa-sentinel-platform",
-  "framework": "nextjs"
+  "framework": "nextjs",
+  "installCommand": "npm install"
 }
