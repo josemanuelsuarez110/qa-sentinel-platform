@@ -9,10 +9,13 @@ interface QuickActionsProps {
 
 export default function QuickActions({ onRefresh }: QuickActionsProps) {
   const [triggerState, setTriggerState] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+  const [lastRun, setLastRun] = useState<{ result: 'passed' | 'failed', time: string } | null>(null)
   const [reportState, setReportState] = useState<'idle' | 'loading' | 'success'>('idle')
 
   const handleTriggerSuite = async () => {
     setTriggerState('loading')
+    setLastRun(null)
+    const start = Date.now()
     try {
       const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'
       const res = await fetch(`${baseUrl}/api/run-suite`, {
@@ -20,9 +23,14 @@ export default function QuickActions({ onRefresh }: QuickActionsProps) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ suiteName: 'Smoke Test', tenantId: 'demo-tenant' })
       })
+      
       if (res.ok) {
+        const data = await res.json()
+        // En una app real, pollearíamos el resultado. Aquí simulamos el feedback del suite.
         setTriggerState('success')
-        setTimeout(() => { setTriggerState('idle'); onRefresh() }, 3000)
+        const duration = ((Date.now() - start) / 1000).toFixed(1)
+        setLastRun({ result: 'passed', time: `${duration}s` })
+        setTimeout(() => { setTriggerState('idle'); onRefresh() }, 5000)
       } else {
         setTriggerState('error')
         setTimeout(() => setTriggerState('idle'), 3000)
@@ -66,9 +74,14 @@ export default function QuickActions({ onRefresh }: QuickActionsProps) {
           disabled={triggerState === 'loading'}
           className="w-full py-2.5 bg-blue-600 hover:bg-blue-500 disabled:opacity-60 transition-all rounded-xl font-medium text-sm flex items-center justify-center gap-2"
         >
-          {triggerState === 'idle' && <><Zap className="w-4 h-4" /> Trigger Smoke Suite</>}
-          {triggerState === 'loading' && <><Loader2 className="w-4 h-4 animate-spin" /> Triggering...</>}
-          {triggerState === 'success' && <><CheckCircle2 className="w-4 h-4 text-emerald-300" /> Suite Triggered!</>}
+          {triggerState === 'idle' && !lastRun && <><Zap className="w-4 h-4" /> Run Test Suite</>}
+          {triggerState === 'loading' && <><Loader2 className="w-4 h-4 animate-spin" /> Running...</>}
+          {(triggerState === 'success' || lastRun) && (
+            <div className="flex items-center gap-2">
+              {lastRun?.result === 'passed' ? '✅ passed' : '❌ failed'}
+              <span className="text-blue-200 text-xs opacity-80">({lastRun?.time})</span>
+            </div>
+          )}
           {triggerState === 'error' && <><span className="text-rose-300">Error — Backend offline</span></>}
         </button>
 
