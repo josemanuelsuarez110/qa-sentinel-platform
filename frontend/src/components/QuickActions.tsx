@@ -3,20 +3,19 @@
 import { useState } from 'react'
 import { Zap, FileText, CheckCircle2, Loader2, ShieldCheck, Landmark } from 'lucide-react'
 
-interface QuickActionsProps {
+type QuickActionsProps = {
   onRefresh: () => void
   onStartAudit?: () => void
   onAddLog?: (message: string, type: 'info' | 'success' | 'warning' | 'error') => void
-  onAuditComplete?: (data: { 
-    totalAmount: number, 
-    inconsistencies: number, 
-    riskLevel: string,
-    vulnerabilities?: number,
-    pagesMapped?: number
-  }) => void
+  onAuditComplete?: (data: any) => void
 }
 
-export default function QuickActions({ onRefresh, onAuditComplete }: QuickActionsProps) {
+export default function QuickActions({ 
+  onRefresh, 
+  onStartAudit, 
+  onAddLog, 
+  onAuditComplete 
+}: QuickActionsProps) {
   const [triggerState, setTriggerState] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [loadingStep, setLoadingStep] = useState<string>('')
   const [lastRun, setLastRun] = useState<{ 
