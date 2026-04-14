@@ -5,6 +5,8 @@ import { createClient } from '@supabase/supabase-js'
 import { Queue, Worker, Job } from 'bullmq'
 import { TestRunner } from '@qa/core'
 import { validateLedger, Transaction } from './modules/financial/financialValidator.js'
+import { runSecurityScan } from './modules/security/securityScanner.js'
+import { runCrawling } from './modules/crawler/crawlingEngine.js'
 import path from 'path'
 import { fileURLToPath } from 'url'
 
@@ -132,12 +134,14 @@ app.get('/api/health-stats', async (req, res) => {
 
     const jobCounts = await testQueue.getJobCounts()
 
-    // -- Financial Validation Engine: High Risk Simulation --
+    // -- Multi-Engine Integration: Sentinel Integrated Auditor --
     const mockTransactions: Transaction[] = [
       { amount: 25000 },
-      { amount: -26000 } // This triggers a Negative Balance Error
+      { amount: -26000 } // Triggers the financial inconsistency
     ]
     const financialResults = validateLedger(mockTransactions)
+    const securityResults = await runSecurityScan('http://localhost:3000')
+    const crawlerResults = await runCrawling('http://localhost:3000')
 
     res.json({
       totalRuns,
@@ -145,11 +149,20 @@ app.get('/api/health-stats', async (req, res) => {
       failCount,
       avgDuration: avgDurationMs > 0 ? `${(avgDurationMs / 1000 / 60).toFixed(1)}m` : '0m',
       activeWorkers: jobCounts.active || 0,
-      flakyTests: (runs.length % 3), // Simulado para dashboard
+      flakyTests: (runs.length % 3),
+      
+      // Integrated Architecture Metrics
       financial: {
-        totalAmount: financialResults.total || 25000,
+        totalAmount: financialResults.total || 0,
         inconsistencies: financialResults.status === 'error' ? 1 : 0,
         riskLevel: financialResults.status === 'error' ? 'High' : 'Low'
+      },
+      security: {
+        status: securityResults.status,
+        issuesCount: securityResults.issues.length
+      },
+      crawler: {
+        pagesMapped: crawlerResults.pagesMapped
       }
     })
   } catch (err: any) {

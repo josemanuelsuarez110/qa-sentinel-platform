@@ -17,6 +17,8 @@ export default function Dashboard() {
     totalAmount: 250000, 
     inconsistencies: 18, 
     riskLevel: 'High',
+    vulnerabilities: 0,
+    pagesMapped: 0,
     lastRunAt: '--:--'
   })
 
@@ -47,7 +49,9 @@ export default function Dashboard() {
           ...data,
           totalAmount: data.financial?.totalAmount ?? prev.totalAmount,
           inconsistencies: data.financial?.inconsistencies ?? prev.inconsistencies,
-          riskLevel: data.financial?.riskLevel ?? prev.riskLevel
+          riskLevel: data.financial?.riskLevel ?? prev.riskLevel,
+          vulnerabilities: data.security?.issuesCount ?? prev.vulnerabilities,
+          pagesMapped: data.crawler?.pagesMapped ?? prev.pagesMapped
         }))
       }
       if (trendsRes.ok) setTrends(await trendsRes.json())
@@ -92,8 +96,8 @@ export default function Dashboard() {
             Sentinel <span className="gradient-text">Finance QA</span>
           </h1>
           <p className="text-slate-400 text-xl leading-relaxed">
-            AI-Powered QA & Financial Systems Validation Platform. <br className="hidden md:block" />
-            Automate checks, detect vulnerabilities, and validate financial integrity at scale.
+            Multi-Engine Quality & Integrity Auditor. <br className="hidden md:block" />
+            QA automation, security scanning, crawling, and financial ledger validation in one unified dashboard.
           </p>
         </section>
 

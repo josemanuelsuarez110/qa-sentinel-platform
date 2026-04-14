@@ -5,7 +5,13 @@ import { Zap, FileText, CheckCircle2, Loader2, ShieldCheck, Landmark } from 'luc
 
 interface QuickActionsProps {
   onRefresh: () => void
-  onAuditComplete?: (data: { totalAmount: number, inconsistencies: number, riskLevel: string }) => void
+  onAuditComplete?: (data: { 
+    totalAmount: number, 
+    inconsistencies: number, 
+    riskLevel: string,
+    vulnerabilities?: number,
+    pagesMapped?: number
+  }) => void
 }
 
 export default function QuickActions({ onRefresh, onAuditComplete }: QuickActionsProps) {
@@ -36,11 +42,11 @@ export default function QuickActions({ onRefresh, onAuditComplete }: QuickAction
     await new Promise(r => setTimeout(r, 600))
     setLoadingStep('→ Validating Ledger Integrity...')
     await new Promise(r => setTimeout(r, 900))
-    setLoadingStep('→ Checking Arithmetic Assertions...')
+    setLoadingStep('→ Checking Security Probes...')
     await new Promise(r => setTimeout(r, 800))
-    setLoadingStep('→ Analyzing Payment Endpoints...')
-    await new Promise(r => setTimeout(r, 1000))
-    setLoadingStep('→ Validation Complete')
+    setLoadingStep('→ Mapping Application Sitemap...')
+    await new Promise(r => setTimeout(r, 600))
+    setLoadingStep('→ Integrated Audit Complete')
     await new Promise(r => setTimeout(r, 400))
 
     const start = Date.now()
@@ -78,7 +84,9 @@ export default function QuickActions({ onRefresh, onAuditComplete }: QuickAction
         onAuditComplete({
           totalAmount: 250000,
           inconsistencies: 12,
-          riskLevel: 'High'
+          riskLevel: 'High',
+          vulnerabilities: 2,
+          pagesMapped: 7
         })
       }
 

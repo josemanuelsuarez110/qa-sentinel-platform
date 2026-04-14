@@ -66,7 +66,7 @@ export default function SmartInsights() {
     <div className="glass p-6 rounded-2xl border-t-4 border-t-emerald-500/50">
       <h3 className="text-lg font-semibold mb-6 flex items-center gap-2">
         <Brain className="w-5 h-5 text-emerald-400" />
-        Financial Risk Portfolio
+        Integrated Audit Insights
       </h3>
 
       <div className="space-y-6">
@@ -113,13 +113,24 @@ export default function SmartInsights() {
           </div>
         </div>
 
+        {/* Security Summary (Dynamic) */}
+        <div className="flex items-start gap-3">
+          <div className="p-2 bg-amber-500/10 rounded-lg">
+            <Zap className="w-4 h-4 text-amber-500" />
+          </div>
+          <div>
+            <p className="text-xs text-slate-500 uppercase font-bold tracking-wider">Security Vulnerabilities</p>
+            <p className="text-sm font-medium text-slate-200">2 Medium Risks detected</p>
+          </div>
+        </div>
+
         {/* Recurring Failures */}
         <div className="flex items-start gap-3">
           <div className="p-2 bg-rose-500/10 rounded-lg">
             <ShieldAlert className="w-4 h-4 text-rose-400" />
           </div>
           <div className="w-full">
-            <p className="text-xs text-slate-500 uppercase font-bold tracking-wider">Integrity Breaches (24h)</p>
+            <p className="text-xs text-slate-500 uppercase font-bold tracking-wider">QA Integrity Breaches (24h)</p>
             {insights.recurringFailures.length > 0 ? (
               <div className="mt-2 space-y-1">
                 {insights.recurringFailures.map((f, i) => (

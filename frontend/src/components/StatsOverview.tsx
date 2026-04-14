@@ -6,6 +6,8 @@ export type Stats = {
   totalAmount?: number
   inconsistencies?: number
   riskLevel?: string
+  vulnerabilities?: number
+  pagesMapped?: number
   lastRunAt?: string
 }
 
@@ -23,25 +25,25 @@ export default function StatsOverview({ stats }: StatsOverviewProps) {
       bg: 'bg-emerald-500/10' 
     },
     { 
+      label: 'Vulnerabilities', 
+      value: (stats?.vulnerabilities ?? 0).toString(), 
+      icon: ShieldAlert, 
+      color: 'text-amber-400', 
+      bg: 'bg-amber-500/10' 
+    },
+    { 
+      label: 'Pages Mapped', 
+      value: (stats?.pagesMapped ?? 0).toString(), 
+      icon: Landmark, 
+      color: 'text-blue-400', 
+      bg: 'bg-blue-500/10' 
+    },
+    { 
       label: 'Inconsistencies', 
       value: (stats?.inconsistencies ?? 0).toString(), 
-      icon: ShieldAlert, 
+      icon: AlertTriangle, 
       color: 'text-rose-400', 
       bg: 'bg-rose-500/10' 
-    },
-    { 
-      label: 'Risk Level', 
-      value: stats?.riskLevel ?? 'Low', 
-      icon: TrendingUp, 
-      color: stats?.riskLevel === 'High' ? 'text-rose-500' : 'text-blue-400', 
-      bg: stats?.riskLevel === 'High' ? 'bg-rose-500/10' : 'bg-blue-500/10' 
-    },
-    { 
-      label: 'Last Audit', 
-      value: stats?.lastRunAt ?? '--:--', 
-      icon: Clock, 
-      color: 'text-purple-400', 
-      bg: 'bg-purple-500/10' 
     },
   ]
 
