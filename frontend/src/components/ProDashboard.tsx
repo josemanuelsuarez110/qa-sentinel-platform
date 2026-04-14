@@ -29,7 +29,8 @@ export default function ProDashboard() {
     setResults(null)
 
     const addLog = (message: string, type: LogType = "info") => {
-      setLogs(prev => [...prev, { message, type }])
+      const now = new Date().toLocaleTimeString()
+      setLogs(prev => [...prev, { message: `[${now}] ${message}`, type }])
     }
 
     addLog("Initializing Sentinel Engine...", "info")
@@ -82,12 +83,18 @@ export default function ProDashboard() {
           AI QA & Financial Validation Dashboard
         </h1>
 
-        <button
-          onClick={runAudit}
-          className="bg-blue-600 text-white px-4 py-2 rounded-xl"
-        >
-          {loading ? "Running..." : "Run Audit"}
-        </button>
+        <div className="flex gap-4 items-center">
+          <input
+            placeholder="Enter URL to scan..."
+            className="border border-gray-700 bg-gray-900 p-2 rounded-xl text-white outline-none focus:border-blue-500 transition-colors w-64"
+          />
+          <button
+            onClick={runAudit}
+            className="bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-500 transition-colors"
+          >
+            {loading ? "Running..." : "Run Audit"}
+          </button>
+        </div>
       </div>
 
       {/* METRICS */}
@@ -103,8 +110,8 @@ export default function ProDashboard() {
         </div>
 
         <div className="p-4 bg-gray-900 rounded-xl">
-          <p>Risk Level</p>
-          <h2 className="text-xl font-bold text-yellow-400">Medium</h2>
+          <p>Global Evaluation</p>
+          <h2 className="text-xl font-bold text-yellow-400">Risk Score: 7.2 / 10</h2>
         </div>
       </div>
 
