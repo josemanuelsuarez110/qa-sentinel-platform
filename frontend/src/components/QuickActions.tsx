@@ -2,10 +2,12 @@
 
 import { ShieldCheck } from 'lucide-react'
 
+type LogType = "info" | "success" | "warning" | "error"
+
 type QuickActionsProps = {
   onRefresh?: () => void
   onStartAudit?: () => void
-  onAddLog?: (message: string, type?: string) => void
+  onAddLog?: (message: string, type?: LogType) => void
   onAuditComplete?: (data: any) => void
 }
 
