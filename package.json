@@ -1,9 +1,6 @@
 {
   "name": "tu-proyecto",
   "version": "0.1.0",
-  "workspaces": [
-    "frontend"
-  ],
   "private": true,
   "engines": {
     "node": "20.x"
