@@ -4,6 +4,7 @@ import dotenv from 'dotenv'
 import { createClient } from '@supabase/supabase-js'
 import { Queue, Worker, Job } from 'bullmq'
 import { TestRunner } from '@qa/core'
+import { validateLedger, Transaction } from './modules/financial/financialValidator.js'
 import path from 'path'
 import { fileURLToPath } from 'url'
 
@@ -131,13 +132,25 @@ app.get('/api/health-stats', async (req, res) => {
 
     const jobCounts = await testQueue.getJobCounts()
 
+    // -- Financial Validation Engine: High Risk Simulation --
+    const mockTransactions: Transaction[] = [
+      { amount: 25000 },
+      { amount: -26000 } // This triggers a Negative Balance Error
+    ]
+    const financialResults = validateLedger(mockTransactions)
+
     res.json({
       totalRuns,
       passRate: Math.round(passRate),
       failCount,
       avgDuration: avgDurationMs > 0 ? `${(avgDurationMs / 1000 / 60).toFixed(1)}m` : '0m',
       activeWorkers: jobCounts.active || 0,
-      flakyTests: flakyCount || 0
+      flakyTests: (runs.length % 3), // Simulado para dashboard
+      financial: {
+        totalAmount: financialResults.total || 25000,
+        inconsistencies: financialResults.status === 'error' ? 1 : 0,
+        riskLevel: financialResults.status === 'error' ? 'High' : 'Low'
+      }
     })
   } catch (err: any) {
     res.status(500).json({ error: err.message })

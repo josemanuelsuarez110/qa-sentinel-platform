@@ -13,12 +13,20 @@ import QuickActions from '@/components/QuickActions'
 export default function Dashboard() {
   const [stats, setStats] = useState({ 
     totalRuns: 120, 
-    passRate: 98, 
-    totalAmount: 25000, 
-    inconsistencies: 3, 
-    riskLevel: 'Medium',
-    lastRunAt: new Date().toLocaleTimeString()
+    passRate: 85, 
+    totalAmount: 250000, 
+    inconsistencies: 18, 
+    riskLevel: 'High',
+    lastRunAt: '--:--'
   })
+
+  // Evitar Errores de Hidratación en Next.js
+  useEffect(() => {
+    setStats(prev => ({ 
+      ...prev, 
+      lastRunAt: new Date().toLocaleTimeString() 
+    }))
+  }, [])
   const [history, setHistory] = useState([])
   const [trends, setTrends] = useState([])
   const [loading, setLoading] = useState(true)
@@ -32,7 +40,16 @@ export default function Dashboard() {
         fetch(`${baseUrl}/api/execution-trends`)
       ])
 
-      if (statsRes.ok) setStats(await statsRes.json())
+      if (statsRes.ok) {
+        const data = await statsRes.json()
+        setStats(prev => ({
+          ...prev,
+          ...data,
+          totalAmount: data.financial?.totalAmount ?? prev.totalAmount,
+          inconsistencies: data.financial?.inconsistencies ?? prev.inconsistencies,
+          riskLevel: data.financial?.riskLevel ?? prev.riskLevel
+        }))
+      }
       if (trendsRes.ok) setTrends(await trendsRes.json())
       if (historyRes.ok) {
         const runsData = await historyRes.json()
@@ -147,7 +164,17 @@ export default function Dashboard() {
           <div className="space-y-6">
             <SmartInsights />
             <FlakyAlerts />
-            <QuickActions onRefresh={fetchData} />
+            <QuickActions 
+              onRefresh={fetchData} 
+              onAuditComplete={(data) => {
+                setStats(prev => ({
+                  ...prev,
+                  totalAmount: data.totalAmount,
+                  inconsistencies: data.inconsistencies,
+                  riskLevel: data.riskLevel
+                }))
+              }}
+            />
           </div>
         </div>
 

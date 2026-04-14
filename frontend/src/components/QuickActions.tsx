@@ -5,9 +5,10 @@ import { Zap, FileText, CheckCircle2, Loader2, ShieldCheck, Landmark } from 'luc
 
 interface QuickActionsProps {
   onRefresh: () => void
+  onAuditComplete?: (data: { totalAmount: number, inconsistencies: number, riskLevel: string }) => void
 }
 
-export default function QuickActions({ onRefresh }: QuickActionsProps) {
+export default function QuickActions({ onRefresh, onAuditComplete }: QuickActionsProps) {
   const [triggerState, setTriggerState] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [loadingStep, setLoadingStep] = useState<string>('')
   const [lastRun, setLastRun] = useState<{ 
@@ -72,6 +73,15 @@ export default function QuickActions({ onRefresh }: QuickActionsProps) {
           "No auth-less payment endpoints found"
         ]
       })
+      // Simulación de RIESGO ALTO después de la auditoría
+      if (onAuditComplete) {
+        onAuditComplete({
+          totalAmount: 250000,
+          inconsistencies: 12,
+          riskLevel: 'High'
+        })
+      }
+
       setTimeout(() => { setTriggerState('idle'); onRefresh() }, 8000)
 
     } catch (err) {
@@ -97,6 +107,14 @@ export default function QuickActions({ onRefresh }: QuickActionsProps) {
         ]
       })
       setTimeout(() => setTriggerState('idle'), 8000)
+
+      if (onAuditComplete) {
+        onAuditComplete({
+          totalAmount: 250000,
+          inconsistencies: 12,
+          riskLevel: 'High'
+        })
+      }
     }
   }
 

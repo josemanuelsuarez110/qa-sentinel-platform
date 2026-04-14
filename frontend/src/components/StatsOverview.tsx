@@ -34,7 +34,7 @@ export default function StatsOverview({ stats }: StatsOverviewProps) {
       value: stats?.riskLevel ?? 'Low', 
       icon: TrendingUp, 
       color: stats?.riskLevel === 'High' ? 'text-rose-500' : 'text-blue-400', 
-      bg: 'bg-blue-500/10' 
+      bg: stats?.riskLevel === 'High' ? 'bg-rose-500/10' : 'bg-blue-500/10' 
     },
     { 
       label: 'Last Audit', 

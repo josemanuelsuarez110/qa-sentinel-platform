@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Brain, Zap, Clock, TrendingUp, Sparkles, Loader2 } from 'lucide-react'
+import { Brain, Zap, Clock, TrendingUp, Sparkles, Loader2, ShieldAlert } from 'lucide-react'
 
 interface Insights {
   mostUnstable: string

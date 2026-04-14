@@ -18,7 +18,7 @@ const FALLBACK_ALERTS: FlakyAlert[] = [
     test_name: 'tenant-isolation-test',
     fail_count: 3,
     last_error: 'Found inconsistent in 3/10 runs.',
-    updated_at: new Date().toISOString()
+    updated_at: '2026-04-13T23:01:46Z'
   }
 ]
 
