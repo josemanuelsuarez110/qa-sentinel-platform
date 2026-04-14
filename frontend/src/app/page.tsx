@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
-import { Activity, Clock } from 'lucide-react'
+import { Activity, Clock, Zap } from 'lucide-react'
 import Header from '@/components/Header'
 import StatsOverview from '@/components/StatsOverview'
 import TestHistoryTable from '@/components/TestHistoryTable'
