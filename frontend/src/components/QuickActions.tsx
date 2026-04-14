@@ -21,18 +21,6 @@ export default function QuickActions({
 
     if (onAddLog) {
       onAddLog('Initializing Sentinel...', 'info')
-      // Simulamos una pequeña demora y completamos para demostración
-      setTimeout(() => {
-        onAddLog('Audit internal sequence started.', 'success')
-        if (onAuditComplete) {
-          onAuditComplete({
-            totalAmount: 250000,
-            inconsistencies: 12,
-            riskLevel: 'High'
-          })
-        }
-        if (onRefresh) onRefresh()
-      }, 1000)
     }
   }
 
