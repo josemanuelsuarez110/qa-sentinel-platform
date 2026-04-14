@@ -27,11 +27,11 @@ export default function QuickActions({
     if (onStartAudit) onStartAudit()
 
     if (onAddLog) {
-      onAddLog('Initializing Sentinel Integrated Engine v1.2.0...', 'info')
+      onAddLog('[✓] Sentinel engine initialized', 'success')
       await new Promise(r => setTimeout(r, 600))
-      onAddLog('[✓] Scan started', 'success')
+      onAddLog('[✓] Crawling started', 'success')
       await new Promise(r => setTimeout(r, 800))
-      onAddLog('[✓] 10 endpoints found', 'success')
+      onAddLog('[✓] 12 endpoints discovered', 'success')
       await new Promise(r => setTimeout(r, 1000))
       onAddLog('[⚠] Missing security headers', 'warning')
       await new Promise(r => setTimeout(r, 1200))
@@ -95,17 +95,17 @@ export default function QuickActions({
                 </div>
                 <div className="space-y-1">
                    <p className="text-slate-500 font-medium">Pages Scanned</p>
-                   <p className="text-white font-bold">8 Identifiers</p>
+                   <p className="text-white font-bold">8</p>
                 </div>
              </div>
              <div className="space-y-2 pt-2 border-t border-white/5">
                 <div className="flex justify-between items-center">
-                   <span className="text-[10px] text-slate-400 uppercase font-bold">Vulnerabilities</span>
-                   <span className="px-1.5 py-0.5 bg-rose-500/20 text-rose-400 text-[10px] font-black rounded">2 FOUND</span>
+                   <span className="text-[10px] text-slate-400 uppercase font-bold">Vulnerabilities Found</span>
+                   <span className="px-1.5 py-0.5 bg-rose-500/20 text-rose-400 text-[10px] font-black rounded">2</span>
                 </div>
                 <ul className="text-[10px] space-y-1 text-slate-300 italic font-mono">
-                   <li className="flex items-center gap-2">• XSS detected</li>
-                   <li className="flex items-center gap-2">• Missing headers</li>
+                   <li className="flex items-center gap-2">• Missing X-Frame-Options</li>
+                   <li className="flex items-center gap-2">• Potential XSS detected</li>
                 </ul>
              </div>
           </div>
@@ -126,7 +126,7 @@ export default function QuickActions({
                    <span className="text-emerald-400 font-bold font-mono">$12,500.00</span>
                 </div>
                 <div className="flex justify-between text-[11px] pt-1 border-t border-emerald-500/10">
-                   <span className="text-slate-400">Errors</span>
+                   <span className="text-slate-400">Inconsistencies</span>
                    <span className="text-rose-400 font-bold font-mono">2</span>
                 </div>
                 <div className="flex justify-between items-center pt-2">

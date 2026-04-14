@@ -110,7 +110,7 @@ export default function Dashboard() {
             Sentinel <span className="gradient-text">Integrated Auditor</span>
           </h1>
           <p className="text-slate-400 text-xl leading-relaxed max-w-3xl">
-            "I maintain a production deployment and a preview environment where I iterate features. The platform executes QA scans, detects vulnerabilities, and validates financial data integrity."
+            "I built an AI-powered QA platform that executes automated scans, detects vulnerabilities, and validates financial data integrity. It simulates real-world testing pipelines with execution logs and analytics dashboards."
           </p>
         </section>
 
