@@ -5,7 +5,7 @@ import { Activity, Clock, Zap } from 'lucide-react'
 import Header from '@/components/Header'
 import StatsOverview from '@/components/StatsOverview'
 import TestHistoryTable from '@/components/TestHistoryTable'
-import HealthChart from '@/components/HealthChart'
+import ProDashboard from '@/components/ProDashboard'
 import FlakyAlerts from '@/components/FlakyAlerts'
 import SmartInsights from '@/components/SmartInsights'
 import QuickActions from '@/components/QuickActions'
@@ -150,17 +150,8 @@ export default function Dashboard() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Charts & History */}
           <div className="lg:col-span-2 space-y-8">
-            <div className="glass p-6 rounded-2xl">
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="text-lg font-semibold flex items-center gap-2">
-                  <Activity className="w-5 h-5 text-blue-400" />
-                  Execution Trends
-                </h3>
-              </div>
-              <div className="h-[300px] w-full">
-                <HealthChart data={trends} />
-              </div>
-            </div>
+            {/* Pro Dashboard: Recharts UI */}
+            <ProDashboard />
 
             <div className="glass p-6 rounded-2xl">
               <h3 className="text-lg font-semibold mb-6 flex items-center gap-2">
