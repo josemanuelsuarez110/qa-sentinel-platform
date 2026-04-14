@@ -2,8 +2,7 @@
   "name": "tu-proyecto",
   "version": "0.1.0",
   "workspaces": [
-    "apps/*",
-    "packages/*"
+    "apps/*"
   ],
   "private": true,
   "engines": {
