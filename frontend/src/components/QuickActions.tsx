@@ -6,15 +6,15 @@ import { Zap, FileText, CheckCircle2, Loader2, ShieldCheck, Landmark } from 'luc
 type QuickActionsProps = {
   onRefresh: () => void
   onStartAudit?: () => void
-  onAddLog?: (message: string, type: 'info' | 'success' | 'warning' | 'error') => void
+  onAddLog?: (message: string, type?: string) => void
   onAuditComplete?: (data: any) => void
 }
 
-export default function QuickActions({ 
-  onRefresh, 
-  onStartAudit, 
-  onAddLog, 
-  onAuditComplete 
+export default function QuickActions({
+  onRefresh,
+  onStartAudit,
+  onAddLog,
+  onAuditComplete
 }: QuickActionsProps) {
   const [triggerState, setTriggerState] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [loadingStep, setLoadingStep] = useState<string>('')
