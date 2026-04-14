@@ -9,8 +9,21 @@ import HealthChart from '@/components/HealthChart'
 import FlakyAlerts from '@/components/FlakyAlerts'
 import SmartInsights from '@/components/SmartInsights'
 import QuickActions from '@/components/QuickActions'
+import ExecutionLogs, { LogEntry } from '@/components/ExecutionLogs'
 
 export default function Dashboard() {
+  const [logs, setLogs] = useState<LogEntry[]>([])
+  const [isExecuting, setIsExecuting] = useState(false)
+  
+  const addLog = (message: string, type: 'info' | 'success' | 'warning' | 'error' = 'info') => {
+    setLogs(prev => [...prev, {
+      id: Math.random().toString(36).substr(2, 9),
+      message,
+      type,
+      timestamp: new Date().toLocaleTimeString([], { hour12: false })
+    }])
+  }
+
   const [stats, setStats] = useState({ 
     totalRuns: 120, 
     passRate: 85, 
@@ -93,11 +106,11 @@ export default function Dashboard() {
         {/* Hero Section */}
         <section className="text-center md:text-left max-w-4xl">
           <h1 className="text-5xl font-extrabold font-display tracking-tight lg:text-7xl mb-6">
-            Sentinel <span className="gradient-text">AI Auditor</span>
+            Sentinel <span className="gradient-text">Integrated Auditor</span>
           </h1>
           <p className="text-slate-400 text-xl leading-relaxed">
-            This platform combines **QA automation, security scanning, and financial validation.** <br className="hidden md:block" />
-            It not only detects technical issues but also verifies business logic integrity, critical in modern fintech systems.
+            Leading **AI-powered QA, Security & Financial Validation Platform**. <br className="hidden md:block" />
+            Designed for high-stakes ERP and Fintech environments where technical quality meets business logic integrity.
           </p>
         </section>
 
@@ -166,11 +179,18 @@ export default function Dashboard() {
 
           {/* Sidebar */}
           <div className="space-y-6">
+            <ExecutionLogs logs={logs} isExecuting={isExecuting} />
             <SmartInsights />
             <FlakyAlerts />
             <QuickActions 
               onRefresh={fetchData} 
+              onStartAudit={() => {
+                setIsExecuting(true)
+                setLogs([])
+              }}
+              onAddLog={addLog}
               onAuditComplete={(data) => {
+                setIsExecuting(false)
                 setStats(prev => ({
                   ...prev,
                   totalAmount: data.totalAmount,

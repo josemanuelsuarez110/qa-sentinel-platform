@@ -10,8 +10,8 @@ export default function Header() {
               <ShieldCheck className="w-5 h-5 text-white" />
             </div>
             <div className="flex flex-col leading-none">
-              <span className="text-xl font-bold tracking-tight">Sentinel<span className="text-emerald-500">Validation</span></span>
-              <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-emerald-500/80">AI QA & Financial Engine</span>
+              <span className="text-xl font-bold tracking-tight">Sentinel<span className="text-emerald-500">Integrated</span></span>
+              <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-emerald-500/80">AI QA & Financial Auditor</span>
             </div>
           </div>
           

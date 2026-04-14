@@ -5,6 +5,8 @@ import { Zap, FileText, CheckCircle2, Loader2, ShieldCheck, Landmark } from 'luc
 
 interface QuickActionsProps {
   onRefresh: () => void
+  onStartAudit?: () => void
+  onAddLog?: (message: string, type: 'info' | 'success' | 'warning' | 'error') => void
   onAuditComplete?: (data: { 
     totalAmount: number, 
     inconsistencies: number, 
@@ -37,94 +39,75 @@ export default function QuickActions({ onRefresh, onAuditComplete }: QuickAction
     setTriggerState('loading')
     setLastRun(null)
     
-    // Simulación de pasos secuenciales según el enfoque FINTECH solicitado
-    setLoadingStep('Initializing Financial Sandbox...')
-    await new Promise(r => setTimeout(r, 600))
-    setLoadingStep('→ Validating Ledger Integrity...')
-    await new Promise(r => setTimeout(r, 900))
-    setLoadingStep('→ Checking Security Probes...')
-    await new Promise(r => setTimeout(r, 800))
-    setLoadingStep('→ Mapping Application Sitemap...')
-    await new Promise(r => setTimeout(r, 600))
-    setLoadingStep('→ Integrated Audit Complete')
-    await new Promise(r => setTimeout(r, 400))
+    if (onStartAudit) onStartAudit()
+    if (onAddLog) {
+      onAddLog('Initializing Sentinel Integrated Engine v1.2.0...', 'info')
+      await new Promise(r => setTimeout(r, 800))
+      onAddLog('Target: Production Sandbox (Fintech-Core)', 'info')
+      await new Promise(r => setTimeout(r, 600))
+      onAddLog('Phase 1: Application Topology Mapping...', 'info')
+      await new Promise(r => setTimeout(r, 900))
+      onAddLog('Found 8 unique pages. Site map generated.', 'success')
+      await new Promise(r => setTimeout(r, 700))
+      onAddLog('Phase 2: Security Vulnerability Probing...', 'info')
+      await new Promise(r => setTimeout(r, 1200))
+      onAddLog('Potential XSS vector detected in /search?q=...', 'warning')
+      onAddLog('Missing security header: X-Frame-Options', 'warning')
+      await new Promise(r => setTimeout(r, 800))
+      onAddLog('Phase 3: Financial Logic Assertion Engine...', 'info')
+      await new Promise(r => setTimeout(r, 1000))
+      onAddLog('Reconciling 120 transactions from ledger...', 'info')
+      await new Promise(r => setTimeout(r, 1500))
+      onAddLog('Arithmetic Mismatch: Expected $25,000, Got $24,988', 'error')
+      onAddLog('Critical inconsistency in synthetic liquidity pool!', 'error')
+      await new Promise(r => setTimeout(r, 1000))
+      onAddLog('Audit complete. Summarizing findings...', 'success')
+    }
 
-    const start = Date.now()
     try {
       const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'
-      const res = await fetch(`${baseUrl}/api/run-suite`, {
+      // Trigger real backend run in background
+      fetch(`${baseUrl}/api/run-suite`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ suiteName: 'Smoke Test', tenantId: 'demo-tenant' })
-      })
+      }).catch(e => console.warn('Backend offline, but demo proceeds.'))
       
-      // Para la demo, siempre mostramos el resultado realista incluso si falla el backend
       setTriggerState('success')
       setLastRun({ 
-        status: 'PASSED', 
+        status: 'FAILED', // We show FAILED because of the inconsistencies
         tests: 12, 
-        passed: 10, 
-        failed: 2, 
-        duration: '1.4s',
+        passed: 9, 
+        failed: 3, 
+        duration: '4.2s',
         financialSummary: {
           totalTransactions: 120,
           totalAmount: 25000,
           inconsistencies: 3,
-          riskLevel: "medium"
+          riskLevel: "High"
         },
         steps: [
           "Ledger integrity verified",
-          "Tax arithmetic assertions passed",
-          "Banking reconciliation matched",
-          "No auth-less payment endpoints found"
+          "Tax arithmetic assertions: FAILED",
+          "Banking reconciliation: MISMATCH",
+          "Security: 2 vulnerabilities found"
         ]
       })
-      // Simulación de RIESGO ALTO después de la auditoría
+
       if (onAuditComplete) {
         onAuditComplete({
           totalAmount: 250000,
           inconsistencies: 12,
           riskLevel: 'High',
           vulnerabilities: 2,
-          pagesMapped: 7
+          pagesMapped: 8
         })
       }
 
-      setTimeout(() => { setTriggerState('idle'); onRefresh() }, 8000)
+      setTimeout(() => { if (triggerState === 'success') setTriggerState('idle'); onRefresh() }, 15000)
 
     } catch (err) {
-      console.warn('Backend offline, using fallback mock data for demo.')
-      setTriggerState('success')
-      setLastRun({ 
-        status: 'PASSED', 
-        tests: 12, 
-        passed: 10, 
-        failed: 2, 
-        duration: '1.4s',
-        financialSummary: {
-          totalTransactions: 120,
-          totalAmount: 25000,
-          inconsistencies: 3,
-          riskLevel: "medium"
-        },
-        steps: [
-          "Ledger integrity verified",
-          "Tax arithmetic assertions passed",
-          "Banking reconciliation matched",
-          "No auth-less payment endpoints found"
-        ]
-      })
-      setTimeout(() => setTriggerState('idle'), 8000)
-
-      if (onAuditComplete) {
-        onAuditComplete({
-          totalAmount: 250000,
-          inconsistencies: 12,
-          riskLevel: 'High',
-          vulnerabilities: 2,
-          pagesMapped: 7
-        })
-      }
+      // Fallback already handled by logic above for demo
     }
   }
 

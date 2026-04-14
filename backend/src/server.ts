@@ -136,8 +136,8 @@ app.get('/api/health-stats', async (req, res) => {
 
     // -- Multi-Engine Integration: Sentinel Integrated Auditor --
     const mockTransactions: Transaction[] = [
-      { amount: 25000 },
-      { amount: -26000 } // Triggers the financial inconsistency
+      { amount: 25000, type: 'credit', category: 'Revenue' },
+      { amount: 24988, type: 'debit', category: 'Settlement' } // Triggers a small $12 gap
     ]
     const financialResults = validateLedger(mockTransactions)
     const securityResults = await runSecurityScan('http://localhost:3000')
@@ -151,18 +151,21 @@ app.get('/api/health-stats', async (req, res) => {
       activeWorkers: jobCounts.active || 0,
       flakyTests: (runs.length % 3),
       
-      // Integrated Architecture Metrics
+      // Integrated Architecture Metrics (Derived from Deepened Logic)
       financial: {
         totalAmount: financialResults.total || 0,
-        inconsistencies: financialResults.status === 'error' ? 1 : 0,
-        riskLevel: financialResults.status === 'error' ? 'High' : 'Low'
+        inconsistencies: financialResults.status !== 'ok' ? 1 : 0,
+        riskLevel: financialResults.riskScore > 70 ? 'High' : (financialResults.riskScore > 30 ? 'Medium' : 'Low'),
+        details: financialResults.details
       },
       security: {
         status: securityResults.status,
-        issuesCount: securityResults.issues.length
+        issuesCount: securityResults.issues.length,
+        riskScore: securityResults.riskScore
       },
       crawler: {
-        pagesMapped: crawlerResults.pagesMapped
+        pagesMapped: crawlerResults.pagesMapped,
+        coverageScore: crawlerResults.coverageScore
       }
     })
   } catch (err: any) {
