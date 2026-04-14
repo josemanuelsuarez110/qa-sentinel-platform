@@ -2,19 +2,24 @@
   "name": "tu-proyecto",
   "version": "0.1.0",
   "private": true,
+  "workspaces": [
+    "frontend",
+    "backend",
+    "packages/*"
+  ],
   "engines": {
     "node": "20.x"
   },
   "description": "Production-grade, self-healing QA automation platform for SaaS",
   "scripts": {
-    "dev": "npm run dev --workspaces --if-present",
-    "build": "npm run build --workspaces --if-present",
+    "dev": "pnpm -r dev",
+    "build": "pnpm -r build",
     "db:seed": "tsx scripts/populate-sample-data.ts",
-    "setup": "npm install && npx playwright install --with-deps",
+    "setup": "pnpm install && npx playwright install --with-deps",
     "test:e2e": "npx playwright test",
     "clean": "npx rimraf **/node_modules **/dist **/.next",
-    "docker:up": "npm run docker:up --workspace packages/infra --if-present",
-    "docker:down": "npm run docker:down --workspace packages/infra --if-present"
+    "docker:up": "pnpm --filter packages/infra exec npm run docker:up --if-present",
+    "docker:down": "pnpm --filter packages/infra exec npm run docker:down --if-present"
   },
   "devDependencies": {
     "@playwright/test": "^1.42.1",

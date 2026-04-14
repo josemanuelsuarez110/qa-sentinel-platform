@@ -13,7 +13,7 @@
     "start": "node dist/server.js"
   },
   "dependencies": {
-    "@qa/core": "file:../packages/qa-core",
+    "@qa/core": "workspace:*",
     "@supabase/supabase-js": "^2.39.7",
     "bullmq": "^5.4.5",
     "cors": "^2.8.5",

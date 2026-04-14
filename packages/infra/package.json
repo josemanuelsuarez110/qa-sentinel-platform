@@ -1,0 +1,10 @@
+{
+  "name": "@qa/infra",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Infrastructure and orchestration for QA Sentinel",
+  "scripts": {
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down"
+  }
+}
