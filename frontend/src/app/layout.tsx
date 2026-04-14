@@ -8,8 +8,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "QA Sentinel Dashboard",
-  description: "Enterprise QA Automation Platform",
+  title: "QA Sentinel Platform",
+  description: "Automated testing orchestration with Playwright & CI pipelines",
 };
 
 export default function RootLayout({

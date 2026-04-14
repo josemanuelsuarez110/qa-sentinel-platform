@@ -58,11 +58,11 @@ export default function Dashboard() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         {/* Hero Section */}
         <section>
-          <h1 className="text-3xl font-bold font-display tracking-tight">
-            QA System <span className="gradient-text">Health Overview</span>
+          <h1 className="text-4xl font-bold font-display tracking-tight lg:text-5xl">
+            QA Sentinel <span className="gradient-text">Platform</span>
           </h1>
-          <p className="text-slate-400 mt-2">
-            Real-time monitoring of SaaS automation suites across all tenants.
+          <p className="text-slate-400 mt-4 text-lg max-w-2xl">
+            Automated testing orchestration with Playwright & CI pipelines
           </p>
         </section>
 
