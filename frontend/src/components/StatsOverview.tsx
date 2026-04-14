@@ -1,12 +1,15 @@
 import { CheckCircle2, XCircle, Clock, Timer } from 'lucide-react'
 
+export type Stats = {
+  totalRuns: number
+  passRate: number
+  failCount: number
+  avgDuration?: string
+  lastRunAt?: string
+}
+
 interface StatsOverviewProps {
-  stats: {
-    totalRuns: number
-    passRate: number
-    failCount: number
-    avgDuration?: string
-  }
+  stats: Stats
 }
 
 export default function StatsOverview({ stats }: StatsOverviewProps) {

@@ -11,7 +11,15 @@ import SmartInsights from '@/components/SmartInsights'
 import QuickActions from '@/components/QuickActions'
 
 export default function Dashboard() {
-  const [stats, setStats] = useState({ totalRuns: 0, passRate: 0, failCount: 0, avgDuration: '0m', activeWorkers: 0, flakyTests: 0, lastRunAt: '' })
+  const [stats, setStats] = useState({ 
+    totalRuns: 12, 
+    passRate: 85, 
+    failCount: 2, 
+    avgDuration: "1.2s", 
+    lastRunAt: new Date().toLocaleTimeString(),
+    activeWorkers: 0, 
+    flakyTests: 0 
+  })
   const [history, setHistory] = useState([])
   const [trends, setTrends] = useState([])
   const [loading, setLoading] = useState(true)
