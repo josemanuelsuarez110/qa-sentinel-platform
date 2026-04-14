@@ -1,6 +1,9 @@
 {
   "name": "@qa/workers",
   "version": "1.0.0",
+  "engines": {
+    "node": "20.x"
+  },
   "scripts": {
     "start": "tsx src/main.ts",
     "dev": "tsx watch src/main.ts"
@@ -8,7 +11,7 @@
   "dependencies": {
     "bullmq": "^5.4.1",
     "ioredis": "^5.3.2",
-    "@qa/core": "workspace:*",
+    "@qa/core": "*",
     "dotenv": "^16.4.5"
   }
 }

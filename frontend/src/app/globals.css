@@ -40,3 +40,53 @@ body {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+.animate-shake {
+  animation: shake 0.2s ease-in-out infinite;
+}
+
+/* Custom shadow sizes for v4 */
+.shadow-premium {
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+}
+
+.animate-in {
+  animation-duration: 500ms;
+  animation-fill-mode: both;
+}
+
+.fade-in {
+  opacity: 0;
+  animation-name: fadeIn;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.slide-in-from-bottom-2 {
+  transform: translateY(0.5rem);
+  animation-name: slideInFromBottom;
+}
+
+@keyframes slideInFromBottom {
+  from { transform: translateY(0.5rem); }
+  to { transform: translateY(0); }
+}
+
+.slide-in-from-top-1 {
+  transform: translateY(-0.25rem);
+  animation-name: slideInFromTop;
+}
+
+@keyframes slideInFromTop {
+  from { transform: translateY(-0.25rem); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}

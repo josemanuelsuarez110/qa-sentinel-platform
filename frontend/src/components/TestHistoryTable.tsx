@@ -1,4 +1,4 @@
-import { CheckCircle2, XCircle, RefreshCcw, Image, Film } from 'lucide-react'
+import { CheckCircle2, XCircle, RefreshCcw, Image, Film, FileText } from 'lucide-react'
 
 interface TestHistoryItem {
   id: string
@@ -26,7 +26,12 @@ export default function TestHistoryTable({ history }: TestHistoryTableProps) {
   const getMediaUrl = (path?: string) => {
     const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'
     if (!path) return null
-    return `${baseUrl}/evidence/${path}`
+    return `${baseUrl}/api/evidence/${path}`
+  }
+
+  const getReportUrl = () => {
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'
+    return `${baseUrl}/api/reports/index.html`
   }
 
   return (
@@ -37,7 +42,7 @@ export default function TestHistoryTable({ history }: TestHistoryTableProps) {
             <th className="py-4 px-2 text-xs font-semibold text-slate-500 uppercase">Test Case</th>
             <th className="py-4 px-2 text-xs font-semibold text-slate-500 uppercase">Tenant</th>
             <th className="py-4 px-2 text-xs font-semibold text-slate-500 uppercase">Status</th>
-            <th className="py-4 px-2 text-xs font-semibold text-slate-500 uppercase text-center">Evidence</th>
+            <th className="py-4 px-2 text-xs font-semibold text-slate-500 uppercase text-center">Execution Evidence</th>
             <th className="py-4 px-2 text-xs font-semibold text-slate-500 uppercase text-right">Time</th>
           </tr>
         </thead>
@@ -51,6 +56,15 @@ export default function TestHistoryTable({ history }: TestHistoryTableProps) {
               </td>
               <td className="py-4 px-2">
                 <div className="flex items-center justify-center gap-3">
+                  <a 
+                    href={getReportUrl()} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="p-1.5 hover:bg-slate-700 rounded-lg transition-colors text-emerald-400"
+                    title="View HTML Report"
+                  >
+                    <FileText className="w-4 h-4" />
+                  </a>
                   {row.screenshot_url && (
                     <a 
                       href={getMediaUrl(row.screenshot_url)!} 
@@ -72,9 +86,6 @@ export default function TestHistoryTable({ history }: TestHistoryTableProps) {
                     >
                       <Film className="w-4 h-4" />
                     </a>
-                  )}
-                  {!row.screenshot_url && !row.video_url && (
-                    <span className="text-slate-700 text-[10px]">—</span>
                   )}
                 </div>
               </td>

@@ -1,20 +1,23 @@
 import { CheckCircle2, XCircle, Clock, Timer } from 'lucide-react'
 
+export type Stats = {
+  totalRuns: number
+  passRate: number
+  failCount: number
+  avgDuration?: string
+  lastRunAt?: string
+}
+
 interface StatsOverviewProps {
-  stats: {
-    totalRuns: number
-    passRate: number
-    failCount: number
-    avgDuration?: string
-  }
+  stats: Stats
 }
 
 export default function StatsOverview({ stats }: StatsOverviewProps) {
   const displayStats = [
-    { label: 'Total Executions', value: stats.totalRuns.toLocaleString(), icon: Timer, color: 'text-blue-400', bg: 'bg-blue-500/10' },
-    { label: 'Pass Rate', value: `${stats.passRate}%`, icon: CheckCircle2, color: 'text-emerald-400', bg: 'bg-emerald-500/10' },
-    { label: 'Failed Tests', value: stats.failCount.toString(), icon: XCircle, color: 'text-rose-400', bg: 'bg-rose-500/10' },
-    { label: 'Avg. Duration', value: stats.avgDuration || '3.5m', icon: Clock, color: 'text-purple-400', bg: 'bg-purple-500/10' },
+    { label: 'Tests ejecutados', value: stats?.totalRuns?.toLocaleString() ?? '0', icon: Timer, color: 'text-blue-400', bg: 'bg-blue-500/10' },
+    { label: 'Resultados (Pass Rate)', value: `${stats?.passRate ?? 0}%`, icon: CheckCircle2, color: 'text-emerald-400', bg: 'bg-emerald-500/10' },
+    { label: 'Failed Tests', value: (stats?.failCount ?? 0).toString(), icon: XCircle, color: 'text-rose-400', bg: 'bg-rose-500/10' },
+    { label: 'Última ejecución', value: stats?.lastRunAt ?? '--:--', icon: Clock, color: 'text-purple-400', bg: 'bg-purple-500/10' },
   ]
 
   return (
