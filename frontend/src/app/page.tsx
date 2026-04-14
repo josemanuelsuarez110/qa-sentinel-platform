@@ -11,7 +11,7 @@ import SmartInsights from '@/components/SmartInsights'
 import QuickActions from '@/components/QuickActions'
 
 export default function Dashboard() {
-  const [stats, setStats] = useState({ totalRuns: 0, passRate: 0, failCount: 0, avgDuration: '0m', activeWorkers: 0, flakyTests: 0 })
+  const [stats, setStats] = useState({ totalRuns: 0, passRate: 0, failCount: 0, avgDuration: '0m', activeWorkers: 0, flakyTests: 0, lastRunAt: '' })
   const [history, setHistory] = useState([])
   const [trends, setTrends] = useState([])
   const [loading, setLoading] = useState(true)
@@ -37,6 +37,10 @@ export default function Dashboard() {
           }))
         )
         setHistory(flatResults.slice(0, 10))
+        if (flatResults.length > 0) {
+          const lastDate = new Date(flatResults[0].created_at)
+          setStats(prev => ({ ...prev, lastRunAt: lastDate.toLocaleTimeString() }))
+        }
       }
     } catch (err) {
       console.error('Error cargando datos del dashboard:', err)

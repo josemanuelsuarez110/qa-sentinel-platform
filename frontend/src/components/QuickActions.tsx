@@ -74,7 +74,7 @@ export default function QuickActions({ onRefresh }: QuickActionsProps) {
           disabled={triggerState === 'loading'}
           className="w-full py-2.5 bg-blue-600 hover:bg-blue-500 disabled:opacity-60 transition-all rounded-xl font-medium text-sm flex items-center justify-center gap-2"
         >
-          {triggerState === 'idle' && !lastRun && <><Zap className="w-4 h-4" /> Run Test Suite</>}
+          {triggerState === 'idle' && !lastRun && <><Zap className="w-4 h-4" /> [ Run Demo Test ]</>}
           {triggerState === 'loading' && <><Loader2 className="w-4 h-4 animate-spin" /> Running...</>}
           {(triggerState === 'success' || lastRun) && (
             <div className="flex items-center gap-2">
