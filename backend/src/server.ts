@@ -184,9 +184,14 @@ app.get('/api/execution-trends', async (req, res) => {
       const date = new Date(curr.created_at)
       const hour = `${date.getHours().toString().padStart(2, '0')}:00`
       
-      if (!acc[hour]) acc[hour] = { time: hour, pass: 0, fail: 0 }
-      if (curr.status === 'passed') acc[hour].pass++
-      else if (curr.status === 'failed') acc[hour].fail++
+      if (!acc[hour]) acc[hour] = { time: hour, pass: 0, fail: 0, risks: 0 }
+      if (curr.status === 'passed') {
+        acc[hour].pass++
+      } else if (curr.status === 'failed') {
+        acc[hour].fail++
+        // Simulate that some failures are also 'integrity risks' (e.g. 30% of failures)
+        if (Math.random() > 0.7) acc[hour].risks++
+      }
       
       return acc
     }, {})

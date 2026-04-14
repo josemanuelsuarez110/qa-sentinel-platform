@@ -3,7 +3,7 @@
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts'
 
 interface HealthChartProps {
-  data: { time: string; pass: number; fail: number }[]
+  data: { time: string; pass: number; fail: number; risks: number }[]
 }
 
 export default function HealthChart({ data }: HealthChartProps) {
@@ -22,6 +22,14 @@ export default function HealthChart({ data }: HealthChartProps) {
           <linearGradient id="colorPass" x1="0" y1="0" x2="0" y2="1">
             <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
             <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+          </linearGradient>
+          <linearGradient id="colorFail" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="5%" stopColor="#f43f5e" stopOpacity={0.2}/>
+            <stop offset="95%" stopColor="#f43f5e" stopOpacity={0}/>
+          </linearGradient>
+          <linearGradient id="colorRisks" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="5%" stopColor="#f59e0b" stopOpacity={0.2}/>
+            <stop offset="95%" stopColor="#f59e0b" stopOpacity={0}/>
           </linearGradient>
         </defs>
         <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
@@ -46,6 +54,23 @@ export default function HealthChart({ data }: HealthChartProps) {
           strokeWidth={3} 
           fillOpacity={1} 
           fill="url(#colorPass)" 
+        />
+        <Area 
+          type="monotone" 
+          dataKey="fail" 
+          stroke="#f43f5e" 
+          strokeWidth={2} 
+          fillOpacity={1} 
+          fill="url(#colorFail)" 
+        />
+        <Area 
+          type="monotone" 
+          dataKey="risks" 
+          stroke="#f59e0b" 
+          strokeWidth={2} 
+          strokeDasharray="5 5"
+          fillOpacity={1} 
+          fill="url(#colorRisks)" 
         />
       </AreaChart>
     </ResponsiveContainer>
