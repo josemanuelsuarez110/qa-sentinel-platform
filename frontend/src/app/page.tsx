@@ -93,11 +93,11 @@ export default function Dashboard() {
         {/* Hero Section */}
         <section className="text-center md:text-left max-w-4xl">
           <h1 className="text-5xl font-extrabold font-display tracking-tight lg:text-7xl mb-6">
-            Sentinel <span className="gradient-text">Finance QA</span>
+            Sentinel <span className="gradient-text">AI Auditor</span>
           </h1>
           <p className="text-slate-400 text-xl leading-relaxed">
-            Multi-Engine Quality & Integrity Auditor. <br className="hidden md:block" />
-            QA automation, security scanning, crawling, and financial ledger validation in one unified dashboard.
+            This platform combines **QA automation, security scanning, and financial validation.** <br className="hidden md:block" />
+            It not only detects technical issues but also verifies business logic integrity, critical in modern fintech systems.
           </p>
         </section>
 
