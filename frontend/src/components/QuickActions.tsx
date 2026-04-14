@@ -24,17 +24,15 @@ export default function QuickActions({ onRefresh }: QuickActionsProps) {
     setTriggerState('loading')
     setLastRun(null)
     
-    // Simulación de pasos secuenciales según especificaciones del usuario
+    // Simulación de pasos secuenciales y delays según el feedback del usuario
     setLoadingStep('Launching browser...')
-    await new Promise(r => setTimeout(r, 600))
-    setLoadingStep('→ Navigating to homepage...')
+    await new Promise(r => setTimeout(r, 500))
+    setLoadingStep('Scanning DOM...')
     await new Promise(r => setTimeout(r, 800))
-    setLoadingStep('→ Validating elements...')
-    await new Promise(r => setTimeout(r, 700))
-    setLoadingStep('→ Checking API responses...')
-    await new Promise(r => setTimeout(r, 900))
-    setLoadingStep('→ Test completed')
-    await new Promise(r => setTimeout(r, 400))
+    setLoadingStep('Running assertions...')
+    await new Promise(r => setTimeout(r, 600))
+    setLoadingStep('→ DONE')
+    await new Promise(r => setTimeout(r, 200))
 
     const start = Date.now()
     try {
@@ -57,10 +55,9 @@ export default function QuickActions({ onRefresh }: QuickActionsProps) {
           duration: '1.4s',
           steps: [
             "Launching browser",
-            "Navigating to homepage",
-            "Validating elements",
-            "Checking API responses",
-            "Test completed"
+            "Scanning DOM",
+            "Running assertions",
+            "Finalizing report"
           ]
         })
         setTimeout(() => { setTriggerState('idle'); onRefresh() }, 8000)
@@ -153,10 +150,20 @@ export default function QuickActions({ onRefresh }: QuickActionsProps) {
                   </span>
                 </div>
                 {lastRun && (
-                  <div className="flex gap-3 text-[10px] uppercase tracking-wider font-bold opacity-70">
-                    <span className="text-slate-300">Tests: {lastRun.tests}</span>
-                    <span className="text-emerald-400">Pass: {lastRun.passed}</span>
-                    <span className="text-rose-400">Fail: {lastRun.failed}</span>
+                  <div className="flex flex-col items-center gap-1 mt-1">
+                    <div className="flex gap-3 text-[10px] uppercase tracking-wider font-bold opacity-70">
+                      <span className="text-slate-300">Tests: {lastRun.tests}</span>
+                      <span className="text-emerald-400">Pass: {lastRun.passed}</span>
+                      <span className="text-rose-400">Fail: {lastRun.failed}</span>
+                    </div>
+                    {/* Log de pasos solicitado por el usuario */}
+                    <div className="flex flex-col items-center mt-1 border-t border-white/5 pt-1 w-full">
+                      {lastRun.steps.map((step, i) => (
+                        <p key={i} className="text-[9px] text-slate-500 font-mono leading-tight">
+                          {step}
+                        </p>
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>

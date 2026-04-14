@@ -76,8 +76,8 @@ export default function Dashboard() {
             QA Sentinel <span className="gradient-text">Platform</span>
           </h1>
           <p className="text-slate-400 text-xl leading-relaxed">
-            Automate end-to-end testing workflows using Playwright, <br className="hidden md:block" />
-            CI/CD pipelines, and real-time reporting dashboards.
+            Simulate and visualize automated testing workflows <br className="hidden md:block" />
+            using Playwright-style execution and real-time reporting.
           </p>
         </section>
 
