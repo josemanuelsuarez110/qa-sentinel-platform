@@ -62,7 +62,7 @@ export default function Dashboard() {
             QA Sentinel <span className="gradient-text">Platform</span>
           </h1>
           <p className="text-slate-400 mt-4 text-lg max-w-2xl">
-            Automated testing orchestration with Playwright & CI pipelines
+            Enterprise-grade automated testing orchestration with real-time observability.
           </p>
         </section>
 

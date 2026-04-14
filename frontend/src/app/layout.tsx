@@ -9,7 +9,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "QA Sentinel Platform",
-  description: "Automated testing orchestration with Playwright & CI pipelines",
+  description: "Automated testing orchestration using Playwright, CI/CD pipelines, and real-time reporting.",
 };
 
 export default function RootLayout({
