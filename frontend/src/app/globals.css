@@ -80,3 +80,13 @@ body {
   from { transform: translateY(0.5rem); }
   to { transform: translateY(0); }
 }
+
+.slide-in-from-top-1 {
+  transform: translateY(-0.25rem);
+  animation-name: slideInFromTop;
+}
+
+@keyframes slideInFromTop {
+  from { transform: translateY(-0.25rem); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}

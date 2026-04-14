@@ -9,12 +9,24 @@ interface QuickActionsProps {
 
 export default function QuickActions({ onRefresh }: QuickActionsProps) {
   const [triggerState, setTriggerState] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+  const [loadingStep, setLoadingStep] = useState<string>('')
   const [lastRun, setLastRun] = useState<{ result: 'passed' | 'failed', time: string } | null>(null)
   const [reportState, setReportState] = useState<'idle' | 'loading' | 'success'>('idle')
 
   const handleTriggerSuite = async () => {
     setTriggerState('loading')
     setLastRun(null)
+    
+    // Simulación de pasos secuenciales para el feedback visual
+    setLoadingStep('Running test...')
+    await new Promise(r => setTimeout(r, 800))
+    setLoadingStep('→ Checking endpoints...')
+    await new Promise(r => setTimeout(r, 1000))
+    setLoadingStep('→ Validating response...')
+    await new Promise(r => setTimeout(r, 800))
+    setLoadingStep('→ DONE')
+    await new Promise(r => setTimeout(r, 400))
+
     const start = Date.now()
     try {
       const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'
@@ -89,11 +101,18 @@ export default function QuickActions({ onRefresh }: QuickActionsProps) {
 
             {triggerState === 'loading' && (
               <>
-                <div className="relative w-5 h-5">
+                <div className="relative w-5 h-5 flex-shrink-0">
                   <div className="absolute inset-0 border-2 border-white/20 rounded-full" />
                   <div className="absolute inset-0 border-2 border-white border-t-transparent rounded-full animate-spin" />
                 </div>
-                <span className="tracking-wide">Executing Suite...</span>
+                <div className="flex flex-col items-start overflow-hidden">
+                  <span 
+                    key={loadingStep}
+                    className="tracking-wide text-xs font-mono animate-in fade-in slide-in-from-top-1 duration-300 whitespace-nowrap"
+                  >
+                    {loadingStep}
+                  </span>
+                </div>
               </>
             )}
 
