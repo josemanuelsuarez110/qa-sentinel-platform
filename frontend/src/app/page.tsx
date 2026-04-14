@@ -37,9 +37,11 @@ export default function Dashboard() {
           }))
         )
         setHistory(flatResults.slice(0, 10))
-        if (flatResults.length > 0) {
+        if (flatResults.length > 0 && flatResults[0]?.created_at) {
           const lastDate = new Date(flatResults[0].created_at)
-          setStats(prev => ({ ...prev, lastRunAt: lastDate.toLocaleTimeString() }))
+          if (!isNaN(lastDate.getTime())) {
+            setStats(prev => ({ ...prev, lastRunAt: lastDate.toLocaleTimeString() }))
+          }
         }
       }
     } catch (err) {
