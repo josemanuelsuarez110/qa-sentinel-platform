@@ -1,5 +1,5 @@
 {
   "name": "qa-sentinel-platform",
   "framework": "nextjs",
-  "installCommand": "npm install"
+  "installCommand": "npm install --legacy-peer-deps"
 }
