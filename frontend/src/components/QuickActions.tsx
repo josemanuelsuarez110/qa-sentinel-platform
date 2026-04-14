@@ -72,17 +72,53 @@ export default function QuickActions({ onRefresh }: QuickActionsProps) {
           id="trigger-smoke-suite"
           onClick={handleTriggerSuite}
           disabled={triggerState === 'loading'}
-          className="w-full py-2.5 bg-blue-600 hover:bg-blue-500 disabled:opacity-60 transition-all rounded-xl font-medium text-sm flex items-center justify-center gap-2"
+          className="group relative w-full py-3.5 bg-blue-600 hover:bg-blue-500 disabled:bg-blue-800 disabled:cursor-not-allowed transition-all duration-300 rounded-xl font-bold text-sm flex items-center justify-center gap-3 active:scale-[0.97] overflow-hidden shadow-lg shadow-blue-500/20"
         >
-          {triggerState === 'idle' && !lastRun && <><Zap className="w-4 h-4" /> [ Run Demo Test ]</>}
-          {triggerState === 'loading' && <><Loader2 className="w-4 h-4 animate-spin" /> Running...</>}
-          {(triggerState === 'success' || lastRun) && (
-            <div className="flex items-center gap-2">
-              {lastRun?.result === 'passed' ? '✅ passed' : '❌ failed'}
-              <span className="text-blue-200 text-xs opacity-80">({lastRun?.time})</span>
-            </div>
+          {/* Background Pulse during loading */}
+          {triggerState === 'loading' && (
+            <div className="absolute inset-0 bg-blue-400/20 animate-pulse" />
           )}
-          {triggerState === 'error' && <><span className="text-rose-300">Error — Backend offline</span></>}
+
+          <div className="relative flex items-center justify-center gap-2 transition-all duration-300">
+            {triggerState === 'idle' && !lastRun && (
+              <>
+                <Zap className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                <span>Run Demo Test</span>
+              </>
+            )}
+
+            {triggerState === 'loading' && (
+              <>
+                <div className="relative w-5 h-5">
+                  <div className="absolute inset-0 border-2 border-white/20 rounded-full" />
+                  <div className="absolute inset-0 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                </div>
+                <span className="tracking-wide">Executing Suite...</span>
+              </>
+            )}
+
+            {(triggerState === 'success' || (lastRun && triggerState !== 'loading')) && (
+              <div className="flex items-center gap-2 animate-in fade-in slide-in-from-bottom-2 duration-500">
+                {lastRun?.result === 'passed' ? (
+                  <CheckCircle2 className="w-5 h-5 text-emerald-300" />
+                ) : (
+                  <Zap className="w-5 h-5 text-rose-300" />
+                )}
+                <span className="font-bold">
+                  {lastRun?.result === 'passed' ? 'PASSED' : 'FAILED'}
+                </span>
+                <span className="text-blue-100/60 text-xs font-medium bg-white/10 px-2 py-0.5 rounded-full">
+                  {lastRun?.time}
+                </span>
+              </div>
+            )}
+
+            {triggerState === 'error' && (
+              <span className="text-rose-200 flex items-center gap-2 animate-shake">
+                <Zap className="w-4 h-4" /> Error — Backend Offline
+              </span>
+            )}
+          </div>
         </button>
 
         <button

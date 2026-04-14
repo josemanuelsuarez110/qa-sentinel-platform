@@ -71,31 +71,43 @@ export default function Dashboard() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         {/* Hero Section */}
-        <section>
-          <h1 className="text-4xl font-bold font-display tracking-tight lg:text-5xl">
+        <section className="text-center md:text-left max-w-4xl">
+          <h1 className="text-5xl font-extrabold font-display tracking-tight lg:text-7xl mb-6">
             QA Sentinel <span className="gradient-text">Platform</span>
           </h1>
-          <p className="text-slate-400 mt-4 text-lg max-w-2xl">
-            Enterprise-grade automated testing orchestration with real-time observability.
+          <p className="text-slate-400 text-xl leading-relaxed">
+            Automate end-to-end testing workflows using Playwright, <br className="hidden md:block" />
+            CI/CD pipelines, and real-time reporting dashboards.
           </p>
         </section>
 
         {/* How It Works Section */}
-        <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="glass p-6 rounded-2xl border-l-4 border-blue-500 hover:bg-slate-800/20 transition-all">
-            <h4 className="text-sm font-bold text-blue-400 uppercase tracking-widest mb-2">Step 1</h4>
-            <h3 className="text-xl font-bold mb-2">Connect repo</h3>
-            <p className="text-slate-400 text-sm">Link your SaaS repository to sync your Playwright test suites instantly.</p>
+        <section className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
+          <div className="glass group p-8 rounded-3xl border-t border-white/5 hover:border-blue-500/50 transition-all duration-500 relative overflow-hidden">
+            <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+              <Zap className="w-16 h-16 text-blue-400" />
+            </div>
+            <h4 className="text-xs font-bold text-blue-400 uppercase tracking-[0.2em] mb-4">Step 1</h4>
+            <h3 className="text-2xl font-bold mb-3">Trigger test execution</h3>
+            <p className="text-slate-400 text-sm leading-relaxed">Initiate comprehensive test suites manually or via webhook integration.</p>
           </div>
-          <div className="glass p-6 rounded-2xl border-l-4 border-emerald-500 hover:bg-slate-800/20 transition-all">
-            <h4 className="text-sm font-bold text-emerald-400 uppercase tracking-widest mb-2">Step 2</h4>
-            <h3 className="text-xl font-bold mb-2">Run tests</h3>
-            <p className="text-slate-400 text-sm">Execute manual or automated test suites through our high-concurrency workers.</p>
+
+          <div className="glass group p-8 rounded-3xl border-t border-white/5 hover:border-emerald-500/50 transition-all duration-500 relative overflow-hidden">
+            <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+              <Activity className="w-16 h-16 text-emerald-400" />
+            </div>
+            <h4 className="text-xs font-bold text-emerald-400 uppercase tracking-[0.2em] mb-4">Step 2</h4>
+            <h3 className="text-2xl font-bold mb-3">Run automated checks</h3>
+            <p className="text-slate-400 text-sm leading-relaxed">High-concurrency workers execute your Playwright scenarios in parallel.</p>
           </div>
-          <div className="glass p-6 rounded-2xl border-l-4 border-purple-500 hover:bg-slate-800/20 transition-all">
-            <h4 className="text-sm font-bold text-purple-400 uppercase tracking-widest mb-2">Step 3</h4>
-            <h3 className="text-xl font-bold mb-2">View results</h3>
-            <p className="text-slate-400 text-sm">Access real-time trends, visual reports, and AI-driven failure diagnostics.</p>
+
+          <div className="glass group p-8 rounded-3xl border-t border-white/5 hover:border-purple-500/50 transition-all duration-500 relative overflow-hidden">
+            <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+              <Clock className="w-16 h-16 text-purple-400" />
+            </div>
+            <h4 className="text-xs font-bold text-purple-400 uppercase tracking-[0.2em] mb-4">Step 3</h4>
+            <h3 className="text-2xl font-bold mb-3">Visualize results</h3>
+            <p className="text-slate-400 text-sm leading-relaxed">Access real-time trends, visual reports, and AI failure diagnostics.</p>
           </div>
         </section>
 
