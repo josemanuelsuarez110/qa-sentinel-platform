@@ -20,9 +20,9 @@ export default function Dashboard() {
     try {
       const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'
       const [statsRes, historyRes, trendsRes] = await Promise.all([
-        fetch(`${baseUrl}/health-stats`),
-        fetch(`${baseUrl}/test-history`),
-        fetch(`${baseUrl}/execution-trends`)
+        fetch(`${baseUrl}/api/health-stats`),
+        fetch(`${baseUrl}/api/test-history`),
+        fetch(`${baseUrl}/api/execution-trends`)
       ])
 
       if (statsRes.ok) setStats(await statsRes.json())

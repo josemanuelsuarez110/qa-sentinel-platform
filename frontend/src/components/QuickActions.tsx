@@ -15,7 +15,7 @@ export default function QuickActions({ onRefresh }: QuickActionsProps) {
     setTriggerState('loading')
     try {
       const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'
-      const res = await fetch(`${baseUrl}/run-suite`, {
+      const res = await fetch(`${baseUrl}/api/run-suite`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ suiteName: 'Smoke Test', tenantId: 'demo-tenant' })
