@@ -29,13 +29,13 @@ export default function QuickActions({
     if (onAddLog) {
       onAddLog('Initializing Sentinel Integrated Engine v1.2.0...', 'info')
       await new Promise(r => setTimeout(r, 600))
-      onAddLog('[✓] Crawl started', 'success')
+      onAddLog('[✓] Scan started', 'success')
       await new Promise(r => setTimeout(r, 800))
-      onAddLog('[✓] 12 endpoints discovered', 'success')
+      onAddLog('[✓] 10 endpoints found', 'success')
       await new Promise(r => setTimeout(r, 1000))
       onAddLog('[⚠] Missing security headers', 'warning')
       await new Promise(r => setTimeout(r, 1200))
-      onAddLog('[✓] Financial validation completed', 'success')
+      onAddLog('[✓] Financial audit completed', 'success')
     }
 
     // Wrap up execution
@@ -104,8 +104,8 @@ export default function QuickActions({
                    <span className="px-1.5 py-0.5 bg-rose-500/20 text-rose-400 text-[10px] font-black rounded">2 FOUND</span>
                 </div>
                 <ul className="text-[10px] space-y-1 text-slate-300 italic font-mono">
-                   <li className="flex items-center gap-2">• Missing X-Frame-Options</li>
-                   <li className="flex items-center gap-2">• Potential XSS detected</li>
+                   <li className="flex items-center gap-2">• XSS detected</li>
+                   <li className="flex items-center gap-2">• Missing headers</li>
                 </ul>
              </div>
           </div>
@@ -119,19 +119,19 @@ export default function QuickActions({
              <div className="space-y-2">
                 <div className="flex justify-between text-[11px]">
                    <span className="text-slate-400">Transactions</span>
-                   <span className="text-white font-bold font-mono">45 Verified</span>
+                   <span className="text-white font-bold font-mono">45</span>
                 </div>
                 <div className="flex justify-between text-[11px]">
                    <span className="text-slate-400">Total Amount</span>
                    <span className="text-emerald-400 font-bold font-mono">$12,500.00</span>
                 </div>
                 <div className="flex justify-between text-[11px] pt-1 border-t border-emerald-500/10">
-                   <span className="text-slate-400">Inconsistencies</span>
-                   <span className="text-rose-400 font-bold font-mono">2 DETECTED</span>
+                   <span className="text-slate-400">Errors</span>
+                   <span className="text-rose-400 font-bold font-mono">2</span>
                 </div>
                 <div className="flex justify-between items-center pt-2">
                    <span className="text-[10px] text-slate-400 uppercase font-bold">Risk Level</span>
-                   <span className="px-2 py-0.5 bg-amber-500/20 text-amber-500 text-[10px] font-black rounded uppercase">Medium Risk</span>
+                   <span className="px-2 py-0.5 bg-amber-500/20 text-amber-500 text-[10px] font-black rounded uppercase">Medium</span>
                 </div>
              </div>
           </div>

@@ -109,9 +109,8 @@ export default function Dashboard() {
           <h1 className="text-5xl font-extrabold font-display tracking-tight lg:text-7xl mb-6">
             Sentinel <span className="gradient-text">Integrated Auditor</span>
           </h1>
-          <p className="text-slate-400 text-xl leading-relaxed">
-            Leading **AI-powered QA, Security & Financial Validation Platform**. <br className="hidden md:block" />
-            Designed for high-stakes ERP and Fintech environments where technical quality meets business logic integrity.
+          <p className="text-slate-400 text-xl leading-relaxed max-w-3xl">
+            "I maintain a production deployment and a preview environment where I iterate features. The platform executes QA scans, detects vulnerabilities, and validates financial data integrity."
           </p>
         </section>
 
