@@ -63,29 +63,29 @@ export default function SmartInsights() {
   }
 
   return (
-    <div className="glass p-6 rounded-2xl border-t-4 border-t-purple-500/50">
+    <div className="glass p-6 rounded-2xl border-t-4 border-t-emerald-500/50">
       <h3 className="text-lg font-semibold mb-6 flex items-center gap-2">
-        <Brain className="w-5 h-5 text-purple-400" />
-        Smart Test Insights
+        <Brain className="w-5 h-5 text-emerald-400" />
+        Financial Risk Portfolio
       </h3>
 
       <div className="space-y-6">
         {/* Most Unstable */}
         <div className="flex items-start gap-3">
-          <div className="p-2 bg-yellow-500/10 rounded-lg">
-            <TrendingUp className="w-4 h-4 text-yellow-500" />
+          <div className="p-2 bg-rose-500/10 rounded-lg">
+            <TrendingUp className="w-4 h-4 text-rose-500" />
           </div>
           <div className="flex-1">
-            <p className="text-xs text-slate-500 uppercase font-bold tracking-wider">Most Unstable</p>
-            <p className="text-sm font-medium text-slate-200">{insights.mostUnstable}</p>
+            <p className="text-xs text-slate-500 uppercase font-bold tracking-wider">Critical Risk Item</p>
+            <p className="text-sm font-medium text-slate-200">{insights.mostUnstable === 'None detected' ? 'No systemic risks' : insights.mostUnstable}</p>
             {insights.mostUnstable !== 'None detected' && (
               <button 
                 onClick={() => generateAiInsight(insights.mostUnstable)}
-                className="mt-2 text-[10px] flex items-center gap-1 text-purple-400 hover:text-purple-300 transition-colors"
+                className="mt-2 text-[10px] flex items-center gap-1 text-emerald-400 hover:text-emerald-300 transition-colors"
                 disabled={analyzing}
               >
                 {analyzing ? <Loader2 className="w-3 h-3 animate-spin" /> : <Sparkles className="w-3 h-3" />}
-                Analyze root cause with Sentinel AI
+                Analyze financial impact with Sentinel AI
               </button>
             )}
           </div>
@@ -93,23 +93,22 @@ export default function SmartInsights() {
 
         {/* AI Result Area */}
         {aiSummary && (
-          <div className="p-3 bg-purple-500/5 border border-purple-500/20 rounded-xl text-[11px] text-slate-300 leading-relaxed italic animate-in fade-in slide-in-from-top-2 duration-500">
-            <div className="flex items-center gap-1.5 mb-1 text-purple-400 not-italic font-bold uppercase tracking-tighter">
+          <div className="p-3 bg-emerald-500/5 border border-emerald-500/20 rounded-xl text-[11px] text-slate-300 leading-relaxed italic animate-in fade-in slide-in-from-top-2 duration-500">
+            <div className="flex items-center gap-1.5 mb-1 text-emerald-400 not-italic font-bold uppercase tracking-tighter">
               <Sparkles className="w-3 h-3" />
-              AI Diagnosis
+              AI Risk Diagnosis
             </div>
             {aiSummary}
           </div>
         )}
 
         {/* Avg Duration */}
-        {/* Avg Duration */}
         <div className="flex items-start gap-3">
           <div className="p-2 bg-blue-500/10 rounded-lg">
             <Clock className="w-4 h-4 text-blue-500" />
           </div>
           <div>
-            <p className="text-xs text-slate-500 uppercase font-bold tracking-wider">Avg. Duration</p>
+            <p className="text-xs text-slate-500 uppercase font-bold tracking-wider">Reconciliation Time</p>
             <p className="text-sm font-medium text-slate-200">{(insights.avgDurationMs / 1000).toFixed(2)}s</p>
           </div>
         </div>
@@ -117,10 +116,10 @@ export default function SmartInsights() {
         {/* Recurring Failures */}
         <div className="flex items-start gap-3">
           <div className="p-2 bg-rose-500/10 rounded-lg">
-            <Zap className="w-4 h-4 text-rose-400" />
+            <ShieldAlert className="w-4 h-4 text-rose-400" />
           </div>
           <div className="w-full">
-            <p className="text-xs text-slate-500 uppercase font-bold tracking-wider">Recurring Failures (24h)</p>
+            <p className="text-xs text-slate-500 uppercase font-bold tracking-wider">Integrity Breaches (24h)</p>
             {insights.recurringFailures.length > 0 ? (
               <div className="mt-2 space-y-1">
                 {insights.recurringFailures.map((f, i) => (
@@ -131,7 +130,7 @@ export default function SmartInsights() {
                 ))}
               </div>
             ) : (
-              <p className="text-xs text-slate-600 mt-1">No critical recurring failures detected.</p>
+              <p className="text-xs text-slate-600 mt-1">Ledged integrity fully verified.</p>
             )}
           </div>
         </div>

@@ -12,13 +12,12 @@ import QuickActions from '@/components/QuickActions'
 
 export default function Dashboard() {
   const [stats, setStats] = useState({ 
-    totalRuns: 12, 
-    passRate: 85, 
-    failCount: 2, 
-    avgDuration: "1.2s", 
-    lastRunAt: new Date().toLocaleTimeString(),
-    activeWorkers: 0, 
-    flakyTests: 0 
+    totalRuns: 120, 
+    passRate: 98, 
+    totalAmount: 25000, 
+    inconsistencies: 3, 
+    riskLevel: 'Medium',
+    lastRunAt: new Date().toLocaleTimeString()
   })
   const [history, setHistory] = useState([])
   const [trends, setTrends] = useState([])
@@ -73,41 +72,41 @@ export default function Dashboard() {
         {/* Hero Section */}
         <section className="text-center md:text-left max-w-4xl">
           <h1 className="text-5xl font-extrabold font-display tracking-tight lg:text-7xl mb-6">
-            QA Sentinel <span className="gradient-text">Platform</span>
+            Sentinel <span className="gradient-text">Finance QA</span>
           </h1>
           <p className="text-slate-400 text-xl leading-relaxed">
-            Simulate and visualize automated testing workflows <br className="hidden md:block" />
-            using Playwright-style execution and real-time reporting.
+            AI-Powered QA & Financial Systems Validation Platform. <br className="hidden md:block" />
+            Automate checks, detect vulnerabilities, and validate financial integrity at scale.
           </p>
         </section>
 
         {/* How It Works Section */}
         <section className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
-          <div className="glass group p-8 rounded-3xl border-t border-white/5 hover:border-blue-500/50 transition-all duration-500 relative overflow-hidden">
-            <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-              <Zap className="w-16 h-16 text-blue-400" />
-            </div>
-            <h4 className="text-xs font-bold text-blue-400 uppercase tracking-[0.2em] mb-4">Step 1</h4>
-            <h3 className="text-2xl font-bold mb-3">Trigger test execution</h3>
-            <p className="text-slate-400 text-sm leading-relaxed">Initiate comprehensive test suites manually or via webhook integration.</p>
-          </div>
-
           <div className="glass group p-8 rounded-3xl border-t border-white/5 hover:border-emerald-500/50 transition-all duration-500 relative overflow-hidden">
             <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-              <Activity className="w-16 h-16 text-emerald-400" />
+              <Zap className="w-16 h-16 text-emerald-400" />
             </div>
-            <h4 className="text-xs font-bold text-emerald-400 uppercase tracking-[0.2em] mb-4">Step 2</h4>
-            <h3 className="text-2xl font-bold mb-3">Run automated checks</h3>
-            <p className="text-slate-400 text-sm leading-relaxed">High-concurrency workers execute your Playwright scenarios in parallel.</p>
+            <h4 className="text-xs font-bold text-emerald-400 uppercase tracking-[0.2em] mb-4">Step 1</h4>
+            <h3 className="text-2xl font-bold mb-3">Trigger Financial Sandbox</h3>
+            <p className="text-slate-400 text-sm leading-relaxed">Initiate automated ledger and arithmetic validation suites for ERP systems.</p>
           </div>
 
-          <div className="glass group p-8 rounded-3xl border-t border-white/5 hover:border-purple-500/50 transition-all duration-500 relative overflow-hidden">
+          <div className="glass group p-8 rounded-3xl border-t border-white/5 hover:border-blue-500/50 transition-all duration-500 relative overflow-hidden">
             <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-              <Clock className="w-16 h-16 text-purple-400" />
+              <Activity className="w-16 h-16 text-blue-400" />
             </div>
-            <h4 className="text-xs font-bold text-purple-400 uppercase tracking-[0.2em] mb-4">Step 3</h4>
-            <h3 className="text-2xl font-bold mb-3">Visualize results</h3>
-            <p className="text-slate-400 text-sm leading-relaxed">Access real-time trends, visual reports, and AI failure diagnostics.</p>
+            <h4 className="text-xs font-bold text-blue-400 uppercase tracking-[0.2em] mb-4">Step 2</h4>
+            <h3 className="text-2xl font-bold mb-3">Automate Integrity Checks</h3>
+            <p className="text-slate-400 text-sm leading-relaxed">Verify transaction balancing, tax calculations, and currency conversions in real-time.</p>
+          </div>
+
+          <div className="glass group p-8 rounded-3xl border-t border-white/5 hover:border-rose-500/50 transition-all duration-500 relative overflow-hidden">
+            <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+              <Clock className="w-16 h-16 text-rose-400" />
+            </div>
+            <h4 className="text-xs font-bold text-rose-400 uppercase tracking-[0.2em] mb-4">Step 3</h4>
+            <h3 className="text-2xl font-bold mb-3">Assess Risks & Results</h3>
+            <p className="text-slate-400 text-sm leading-relaxed">Identify financial inconsistencies and exposure of sensitive payment data instantly.</p>
           </div>
         </section>
 
@@ -160,16 +159,16 @@ export default function Dashboard() {
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="space-y-2">
-              <h4 className="font-bold text-slate-200">QA automation demos</h4>
-              <p className="text-sm text-slate-400">Showcase comprehensive test suites to stakeholders with real-time visual feedback.</p>
+              <h4 className="font-bold text-slate-200 uppercase text-[10px] tracking-widest text-emerald-500">Fintech Dashboard</h4>
+              <p className="text-sm text-slate-400">Validate transaction integrity, tax calculations, and detect inconsistencies in banking endpoints.</p>
             </div>
             <div className="space-y-2">
-              <h4 className="font-bold text-slate-200">CI/CD testing pipelines</h4>
-              <p className="text-sm text-slate-400">Integrate seamless automated checks into your deployment workflows for zero-regression releases.</p>
+              <h4 className="font-bold text-slate-200 uppercase text-[10px] tracking-widest text-blue-500">ERP & SAP Migration</h4>
+              <p className="text-sm text-slate-400">Perform large-scale data reconciliation tests for enterprise financial migrations.</p>
             </div>
             <div className="space-y-2">
-              <h4 className="font-bold text-slate-200">UI regression validation</h4>
-              <p className="text-sm text-slate-400">Catch visual discrepancies and functional breakage across all device viewports automatically.</p>
+              <h4 className="font-bold text-slate-200 uppercase text-[10px] tracking-widest text-purple-500">Financial Security Audits</h4>
+              <p className="text-sm text-slate-400">Automatically scan for unauthorized payment endpoints and PII exposure in reports.</p>
             </div>
           </div>
         </section>
