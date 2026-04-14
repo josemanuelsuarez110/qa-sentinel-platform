@@ -5,7 +5,8 @@
   "workspaces": [
     "frontend",
     "backend",
-    "packages/*"
+    "packages/*",
+    "modules/*"
   ],
   "engines": {
     "node": "20.x"
