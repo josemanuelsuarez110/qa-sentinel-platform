@@ -15,7 +15,8 @@ export default function QuickActions({ onRefresh }: QuickActionsProps) {
     tests: number, 
     passed: number, 
     failed: number, 
-    duration: string 
+    duration: string,
+    steps: string[]
   } | null>(null)
   const [reportState, setReportState] = useState<'idle' | 'loading' | 'success'>('idle')
 
@@ -23,14 +24,16 @@ export default function QuickActions({ onRefresh }: QuickActionsProps) {
     setTriggerState('loading')
     setLastRun(null)
     
-    // Simulación de pasos secuenciales para el feedback visual
-    setLoadingStep('Running test...')
+    // Simulación de pasos secuenciales según especificaciones del usuario
+    setLoadingStep('Launching browser...')
+    await new Promise(r => setTimeout(r, 600))
+    setLoadingStep('→ Navigating to homepage...')
     await new Promise(r => setTimeout(r, 800))
-    setLoadingStep('→ Checking endpoints...')
-    await new Promise(r => setTimeout(r, 1000))
-    setLoadingStep('→ Validating response...')
-    await new Promise(r => setTimeout(r, 800))
-    setLoadingStep('→ DONE')
+    setLoadingStep('→ Validating elements...')
+    await new Promise(r => setTimeout(r, 700))
+    setLoadingStep('→ Checking API responses...')
+    await new Promise(r => setTimeout(r, 900))
+    setLoadingStep('→ Test completed')
     await new Promise(r => setTimeout(r, 400))
 
     const start = Date.now()
@@ -51,7 +54,14 @@ export default function QuickActions({ onRefresh }: QuickActionsProps) {
           tests: 12, 
           passed: 10, 
           failed: 2, 
-          duration: '1.4s' 
+          duration: '1.4s',
+          steps: [
+            "Launching browser",
+            "Navigating to homepage",
+            "Validating elements",
+            "Checking API responses",
+            "Test completed"
+          ]
         })
         setTimeout(() => { setTriggerState('idle'); onRefresh() }, 8000)
       } else {
