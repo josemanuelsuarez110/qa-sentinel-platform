@@ -50,24 +50,28 @@ export default function ExecutionLogs({ logs, isExecuting }: ExecutionLogsProps)
           </div>
         )}
 
-        {logs.map((log) => (
-          <div key={log.id} className="flex gap-3 animate-in fade-in slide-in-from-left-2 duration-300">
-            <span className="text-slate-600 flex-shrink-0">[{log.timestamp}]</span>
-            <div className="flex gap-2 items-start">
-              {log.type === 'success' && <CheckCircle2 className="w-4 h-4 text-emerald-500 mt-0.5" />}
-              {log.type === 'warning' && <AlertCircle className="w-4 h-4 text-amber-500 mt-0.5" />}
-              {log.type === 'error' && <AlertCircle className="w-4 h-4 text-rose-500 mt-0.5" />}
-              <span className={`
-                ${log.type === 'success' ? 'text-emerald-400' : ''}
-                ${log.type === 'warning' ? 'text-amber-400' : ''}
-                ${log.type === 'error' ? 'text-rose-400' : ''}
-                ${log.type === 'info' ? 'text-slate-300' : ''}
-              `}>
-                {log.message}
-              </span>
+        {logs.map((log) => {
+          const isCheck = log.message.startsWith('[✓]')
+          const isWarn = log.message.startsWith('[⚠]')
+          const isError = log.message.startsWith('[✗]')
+          
+          return (
+            <div key={log.id} className="flex gap-3 animate-in fade-in slide-in-from-left-1 duration-300">
+              <span className="text-slate-600 flex-shrink-0 text-[10px] mt-1">[{log.timestamp}]</span>
+              <div className="flex gap-2 items-start">
+                <span className={`
+                  font-mono
+                  ${(isCheck || log.type === 'success') ? 'text-emerald-400' : ''}
+                  ${(isWarn || log.type === 'warning') ? 'text-amber-400' : ''}
+                  ${(isError || log.type === 'error') ? 'text-rose-400' : ''}
+                  ${log.type === 'info' && !isCheck && !isWarn && !isError ? 'text-slate-300' : ''}
+                `}>
+                  {log.message}
+                </span>
+              </div>
             </div>
-          </div>
-        ))}
+          )
+        })}
         {isExecuting && (
           <div className="flex gap-3 animate-pulse">
             <span className="text-slate-600">[{new Date().toLocaleTimeString([], { hour12: false })}]</span>

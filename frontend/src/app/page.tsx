@@ -10,6 +10,7 @@ import FlakyAlerts from '@/components/FlakyAlerts'
 import SmartInsights from '@/components/SmartInsights'
 import QuickActions from '@/components/QuickActions'
 import ExecutionLogs, { LogEntry } from '@/components/ExecutionLogs'
+import VulnerabilityHeatmap from '@/components/VulnerabilityHeatmap'
 
 export default function Dashboard() {
   const [logs, setLogs] = useState<LogEntry[]>([])
@@ -174,6 +175,11 @@ export default function Dashboard() {
               ) : (
                 <TestHistoryTable history={history} />
               )}
+            </div>
+
+            {/* Heatmap Section */}
+            <div className="h-[400px]">
+              <VulnerabilityHeatmap />
             </div>
           </div>
 
