@@ -4,17 +4,13 @@ import { useState } from 'react'
 import { Zap, FileText, CheckCircle2, Loader2, ShieldCheck, Landmark } from 'lucide-react'
 
 type QuickActionsProps = {
-  onRefresh: () => void
   onStartAudit?: () => void
   onAddLog?: (message: string, type?: string) => void
-  onAuditComplete?: (data: any) => void
 }
 
 export default function QuickActions({
-  onRefresh,
   onStartAudit,
-  onAddLog,
-  onAuditComplete
+  onAddLog
 }: QuickActionsProps) {
   const [triggerState, setTriggerState] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [loadingStep, setLoadingStep] = useState<string>('')
@@ -93,17 +89,7 @@ export default function QuickActions({
         ]
       })
 
-      if (onAuditComplete) {
-        onAuditComplete({
-          totalAmount: 250000,
-          inconsistencies: 12,
-          riskLevel: 'High',
-          vulnerabilities: 2,
-          pagesMapped: 8
-        })
-      }
-
-      setTimeout(() => { if (triggerState === 'success') setTriggerState('idle'); onRefresh() }, 15000)
+      setTimeout(() => { if (triggerState === 'success') setTriggerState('idle') }, 15000)
 
     } catch (err) {
       // Fallback already handled by logic above for demo
