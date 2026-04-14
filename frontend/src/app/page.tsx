@@ -16,7 +16,7 @@ export default function Dashboard() {
             Sentinel <span className="gradient-text">Integrated Auditor</span>
           </h1>
           <p className="text-slate-400 text-xl leading-relaxed max-w-3xl">
-            "I built an AI-powered QA platform that executes automated scans, detects vulnerabilities, and validates financial data integrity. It simulates real-world testing pipelines with execution logs and analytics dashboards."
+            "I built a QA automation platform deployed on Vercel that simulates real-world scanning pipelines, including execution logs, vulnerability detection, and financial validation layers."
           </p>
         </section>
 
