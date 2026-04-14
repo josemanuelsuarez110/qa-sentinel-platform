@@ -151,6 +151,28 @@ export default function Dashboard() {
             <QuickActions onRefresh={fetchData} />
           </div>
         </div>
+
+        {/* Use Cases Section */}
+        <section className="glass p-8 rounded-3xl border-t border-white/5">
+          <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
+            <Zap className="w-5 h-5 text-blue-400" />
+            Use cases
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="space-y-2">
+              <h4 className="font-bold text-slate-200">QA automation demos</h4>
+              <p className="text-sm text-slate-400">Showcase comprehensive test suites to stakeholders with real-time visual feedback.</p>
+            </div>
+            <div className="space-y-2">
+              <h4 className="font-bold text-slate-200">CI/CD testing pipelines</h4>
+              <p className="text-sm text-slate-400">Integrate seamless automated checks into your deployment workflows for zero-regression releases.</p>
+            </div>
+            <div className="space-y-2">
+              <h4 className="font-bold text-slate-200">UI regression validation</h4>
+              <p className="text-sm text-slate-400">Catch visual discrepancies and functional breakage across all device viewports automatically.</p>
+            </div>
+          </div>
+        </section>
       </div>
     </main>
   )
