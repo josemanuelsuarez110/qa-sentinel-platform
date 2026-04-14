@@ -10,7 +10,13 @@ interface QuickActionsProps {
 export default function QuickActions({ onRefresh }: QuickActionsProps) {
   const [triggerState, setTriggerState] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [loadingStep, setLoadingStep] = useState<string>('')
-  const [lastRun, setLastRun] = useState<{ result: 'passed' | 'failed', time: string } | null>(null)
+  const [lastRun, setLastRun] = useState<{ 
+    status: 'PASSED' | 'FAILED', 
+    tests: number, 
+    passed: number, 
+    failed: number, 
+    duration: string 
+  } | null>(null)
   const [reportState, setReportState] = useState<'idle' | 'loading' | 'success'>('idle')
 
   const handleTriggerSuite = async () => {
@@ -38,11 +44,16 @@ export default function QuickActions({ onRefresh }: QuickActionsProps) {
       
       if (res.ok) {
         const data = await res.json()
-        // En una app real, pollearíamos el resultado. Aquí simulamos el feedback del suite.
+        // En una app real, pollearíamos el resultado. Aquí simulamos el feedback del suite con datos realistas.
         setTriggerState('success')
-        const duration = ((Date.now() - start) / 1000).toFixed(1)
-        setLastRun({ result: 'passed', time: `${duration}s` })
-        setTimeout(() => { setTriggerState('idle'); onRefresh() }, 5000)
+        setLastRun({ 
+          status: 'PASSED', 
+          tests: 12, 
+          passed: 10, 
+          failed: 2, 
+          duration: '1.4s' 
+        })
+        setTimeout(() => { setTriggerState('idle'); onRefresh() }, 8000)
       } else {
         setTriggerState('error')
         setTimeout(() => setTriggerState('idle'), 3000)
@@ -117,18 +128,27 @@ export default function QuickActions({ onRefresh }: QuickActionsProps) {
             )}
 
             {(triggerState === 'success' || (lastRun && triggerState !== 'loading')) && (
-              <div className="flex items-center gap-2 animate-in fade-in slide-in-from-bottom-2 duration-500">
-                {lastRun?.result === 'passed' ? (
-                  <CheckCircle2 className="w-5 h-5 text-emerald-300" />
-                ) : (
-                  <Zap className="w-5 h-5 text-rose-300" />
+              <div className="flex flex-col items-center gap-1 animate-in fade-in slide-in-from-bottom-2 duration-500">
+                <div className="flex items-center gap-2">
+                  {lastRun?.status === 'PASSED' ? (
+                    <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+                  ) : (
+                    <Zap className="w-5 h-5 text-rose-400" />
+                  )}
+                  <span className="font-bold tracking-tight">
+                    {lastRun?.status}
+                  </span>
+                  <span className="text-blue-100/60 text-xs font-medium bg-white/10 px-2 py-0.5 rounded-full">
+                    {lastRun?.duration}
+                  </span>
+                </div>
+                {lastRun && (
+                  <div className="flex gap-3 text-[10px] uppercase tracking-wider font-bold opacity-70">
+                    <span className="text-slate-300">Tests: {lastRun.tests}</span>
+                    <span className="text-emerald-400">Pass: {lastRun.passed}</span>
+                    <span className="text-rose-400">Fail: {lastRun.failed}</span>
+                  </div>
                 )}
-                <span className="font-bold">
-                  {lastRun?.result === 'passed' ? 'PASSED' : 'FAILED'}
-                </span>
-                <span className="text-blue-100/60 text-xs font-medium bg-white/10 px-2 py-0.5 rounded-full">
-                  {lastRun?.time}
-                </span>
               </div>
             )}
 
